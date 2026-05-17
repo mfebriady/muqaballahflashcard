@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Latihan Muqabalah Flashcards</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #16a085;
+            --bg: #ecf0f1;
+            --card-bg: #ffffff;
+            --text: #2c3e50;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .controls {
+            margin-bottom: 20px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        select, button {
+            padding: 10px 15px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            background-color: var(--primary);
+            color: white;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        select {
+            background-color: white;
+            color: var(--text);
+            border: 2px solid var(--primary);
+        }
+
+        button:hover {
+            background-color: var(--secondary);
+        }
+
+        /* Flashcard Container */
+        .card-container {
+            width: 90%;
+            max-width: 550px;
+            height: 350px;
+            perspective: 1000px;
+            cursor: pointer;
+        }
+
+        .card {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.6s;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            border-radius: 15px;
+        }
+
+        .card.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 30px;
+            box-sizing: border-box;
+            background: var(--card-bg);
+            text-align: center;
+        }
+
+        .card-front {
+            border-top: 8px solid var(--primary);
+        }
+
+        .card-back {
+            transform: rotateY(180deg);
+            border-top: 8px solid var(--secondary);
+            background-color: #f9fbfb;
+        }
+
+        .side-indicator {
+            position: absolute;
+            top: 15px;
+            left: 20px;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #7f8c8d;
+        }
+
+        .arabic-text {
+            font-family: 'Traditional Arabic', 'Amiri', 'Cairo', serif;
+            font-size: 28px;
+            font-weight: bold;
+            direction: rtl;
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        .translation-text {
+            font-size: 16px;
+            color: #555;
+            line-height: 1.4;
+            font-style: italic;
+        }
+
+        .progress {
+            margin-top: 15px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h2>Latihan Muqabalah Flashcards</h2>
+        <p>Klik kartu untuk membalik, gunakan tombol untuk navigasi.</p>
+    </header>
+
+    <div class="controls">
+        <label for="langSelect">Bahasa Terjemahan: </label>
+        <select id="langSelect" onchange="changeLanguage()">
+            <option value="id">Indonesia</option>
+            <option value="en">English</option>
+        </select>
+    </div>
+
+    <div class="card-container" onclick="flipCard()">
+        <div class="card" id="flashcard">
+            <!-- Front Face -->
+            <div class="card-face card-front">
+                <span class="side-indicator">Pertanyaan / Syaikh</span>
+                <div class="arabic-text" id="front-arabic"></div>
+                <div class="translation-text" id="front-trans"></div>
+            </div>
+            <!-- Back Face -->
+            <div class="card-face card-back">
+                <span class="side-indicator">Jawaban Anda</span>
+                <div class="arabic-text" id="back-arabic"></div>
+                <div class="translation-text" id="back-trans"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="progress" id="progress-text">Kartu 1 dari 25</div>
+
+    <div class="controls" style="margin-top: 20px;">
+        <button onclick="prevCard(event)">◄ Sebelumnya</button>
+        <button onclick="randomCard(event)">Acak 🎲</button>
+        <button onclick="nextCard(event)">Selanjutnya ►</button>
+    </div>
+
+    <script>
+        const flashcardsData = [
+            {
+                front: { ar: "مَا رَقْمُ تَسْجِيْلِكَ / رَقْمُ اسْتِمَارَتِكَ؟", id: "Berapa nomor pendaftaranmu?", en: "What is your registration number?" },
+                back: { ar: "رَقْمُ تَسْجِيْلِيْ هُوَ...", id: "Nomor pendaftaran saya adalah... [Sebutkan angka dalam bahasa Arab]", en: "My registration number is... [State numbers in Arabic]" }
+            },
+            {
+                front: { ar: "عَرِّفْ بِنَفْسِكَ بِالتَّفْصِيْلِ!", id: "Perkenalkan dirimu secara rinci!", en: "Introduce yourself in detail!" },
+                back: { ar: "اِسْمِيْ... وُلِدْتُ فِيْ... عُمْرِيْ... تَخَرَّجْتُ مِنْ... وَقَدْ حَفِظْتُ...", id: "Nama saya... Lahir di... Umur... Lulusan... Hafalan...", en: "My name is... Born in... Age... Graduated from... Memorized..." }
+            },
+            {
+                front: { ar: "مِنْ أَيْنَ أَنْتَ؟ وَكَيْفَ حَالُ بَلَدِكَ؟", id: "Kamu dari mana? Dan bagaimana kondisi negaramu?", en: "Where are you from? And how is the condition of your country?" },
+                back: { ar: "أَنَا مِنْ إِنْدُوْنِيْسِيَا، مِنْ مَدِيْنَةِ... وَالْحَمْدُ لِلَّهِ بَلَدِيْ فِيْ أَمْنٍ وَأَمَانٍ.", id: "Saya dari Indonesia, kota... Alhamdulillah negara saya aman.", en: "I am from Indonesia, from city of... Alhamdulillah my country is safe and secure." }
+            },
+            {
+                front: { ar: "صُغِ اسْمَ الْفَاعِلِ مِنْ فِعْلِ 'كَتَبَ'!", id: "Bentuklah Isim Fa'il dari kata 'Kataba'!", en: "Form the Active Participle (Ism al-Fa'il) of the verb 'Kataba'!" },
+                back: { ar: "كَاتِبٌ", id: "Katibun (Orang yang menulis)", en: "Katibun (The writer)" }
+            },
+            {
+                front: { ar: "صُغِ اسْمَ الْمَفْعُوْلِ مِنْ فِعْلِ 'كَتَبَ'!", id: "Bentuklah Isim Maf'ul dari kata 'Kataba'!", en: "Form the Passive Participle (Ism al-Maf'ul) of the verb 'Kataba'!" },
+                back: { ar: "مَكْتُوْبٌ", id: "Maktubun (Sesuatu yang ditulis)", en: "Maktubun (The written thing)" }
+            },
+            {
+                front: { ar: "صُغِ اسْمَ الْفَاعِلِ مِنْ فِعْلِ 'نَصَرَ'!", id: "Bentuklah Isim Fa'il dari kata 'Nasara'!", en: "Form the Active Participle (Ism al-Fa'il) of the verb 'Nasara'!" },
+                back: { ar: "نَاصِرٌ", id: "Naashirun (Orang yang menolong)", en: "Naashirun (The helper)" }
+            },
+            {
+                front: { ar: "صُغِ اسْمَ الْمَفْعُوْلِ مِنْ فِعْلِ 'نَصَرَ'!", id: "Bentuklah Isim Maf'ul dari kata 'Nasara'!", en: "Form the Passive Participle (Ism al-Maf'ul) of the verb 'Nasara'!" },
+                back: { ar: "مَنْصُوْرٌ", id: "Manshuurun (Orang/sesuatu yang ditolong)", en: "Manshuurun (The one who is helped)" }
+            },
+            {
+                front: { ar: "مَا هِيَ عَلَامَةُ الرَّفْعِ فِيْ جَمْعِ الْمُذَكَّرِ السَّالِمِ؟", id: "Apa tanda rafa' pada Jamak Mudzakkar Salim?", en: "What is the sign of Raf' in Sound Masculine Plural (Jam' Mudhakkar Salim)?" },
+                back: { ar: "عَلَامَةُ الرَّفْعِ فِيْهِ هِيَ الْوَاوُ.", id: "Tanda rafa'nya adalah huruf Wawu.", en: "The sign of Raf' in it is the letter Waw." }
+            },
+            {
+                front: { ar: "مَثِّلْ لِجَمْعِ الْمُذَكَّرِ السَّالِمِ الْمَرْفُوْعِ!", id: "Berikan contoh Jamak Mudzakkar Salim yang Marfu'!", en: "Give an example of a Marfu' Sound Masculine Plural!" },
+                back: { ar: "جَاءَ الْمُسْلِمُوْنَ.", id: "Jaa'al-muslimuun (Telah datang orang-orang muslim).", en: "Jaa'al-muslimuun (The muslims came)." }
+            },
+            {
+                front: { ar: "كَمْ حَفِظْتَ مِنَ الْقُرْآنِ الْكَرِيْمِ؟", id: "Berapa banyak hafalan Al-Qur'anmu?", en: "How much of the Holy Qur'an have you memorized?" },
+                back: { ar: "حَفِظْتُ [jumlah] أَجْزَاءٍ، وَالْحَمْدُ لِلَّهِ.", id: "Saya hafal [jumlah] juz, alhamdulillah.", en: "I have memorized [number] Juz, Alhamdulillah." }
+            },
+            {
+                front: { ar: "اِقْرَأْ مِنْ بِدَايَةِ سُوْرَةِ عَبَسَ!", id: "Bacalah dari awal surat 'Abasa!", en: "Recite from the beginning of Surah 'Abasa!" },
+                back: { ar: "(عَـبَـسَ وَتَوَلَّىٰ...)", id: "Membaca Ta'awudz, Basmalah, lalu mulai. Pastikan tajwid benar.", en: "Recite Ta'awwudh, Basmalah, then begin. Ensure proper Tajweed." }
+            },
+            {
+                front: { ar: "مَا مَعْنَى قَوْلِهِ تَعَالَى: {الصَّمَدُ} فِيْ سُوْرَةِ الْإِخْلَاصِ؟", id: "Apa makna firman Allah 'Ash-Shamad' dalam surat Al-Ikhlash?", en: "What is the meaning of Allah's statement 'Ash-Shamad' in Surah Al-Ikhlas?" },
+                back: { ar: "هُوَ السَّيِّدُ الَّذِيْ يَصْمُدُ إِلَيْهِ الْخَلَائِقُ فِيْ حَوَائِجِهِمْ، الَّذِيْ لَا جَوْفَ لَهُ.", id: "Tuan Yang dituju seluruh makhluk untuk kebutuhan mereka, Yang tidak berongga.", en: "The Master to Whom all creatures turn for their needs, The One Who has no cavity." }
+            },
+            {
+                front: { ar: "مَا هُوَ التَّصَوُّفُ؟", id: "Apa itu Tasawuf?", en: "What is Sufism (Tasawwuf)?" },
+                back: { ar: "التَّصَوُّفُ فِيْ أَصْلِهِ قَدْ يُقْصَدُ بِهِ تَزْكِيَةُ النَّفْسِ، وَلَكِنْ دَخَلَتْ عَلَيْهِ بِدَعٌ وَانْحِرَافَاتٌ.", id: "Pada asalnya dimaksudkan untuk penyucian jiwa, namun telah kemasukan bid'ah dan penyimpangan.", en: "Originally it meant purification of the soul, but innovations and deviations have entered it." }
+            },
+            {
+                front: { ar: "اُذْكُرْ بَعْضَ الْكَبَائِرِ مَعَ الدَّلِيْلِ!", id: "Sebutkan beberapa dosa besar beserta dalilnya!", en: "Mention some major sins along with the evidence!" },
+                back: { ar: "الشِّرْكُ، السِّحْرُ، قَتْلُ النَّفْسِ، أَكْلُ الرِّبَا. الدَّلِيْلُ: 'اجْتَنِبُوا السَّبْعَ الْمُوْبِقَاتِ...'", id: "Syirik, sihir, membunuh jiwa, riba. Dalil: 'Jauhilah tujuh hal yang membinasakan...'", en: "Shirk, magic, killing a soul, consuming Riba. Evidence: 'Avoid the seven destructive sins...'" }
+            },
+            {
+                front: { ar: "مَا هِيَ الْكُتُبُ السِّتَّةُ؟", id: "Apa itu Kutubus Sittah?", en: "What are the Six Books (Al-Kutub As-Sittah)?" },
+                back: { ar: "هِيَ أَشْهَرُ كُتُبِ الْحَدِيْثِ عِنْدَ أَهْلِ السُّنَّةِ.", id: "Enam kitab hadis paling masyhur di kalangan Ahlus Sunnah.", en: "The six most famous books of Hadith among Ahlus Sunnah." }
+            },
+            {
+                front: { ar: "مَنْ هُمْ مُؤَلِّفُوْا الْكُتُبِ السِّتَّةِ؟", id: "Siapa saja penulis kitab Kutubus Sittah?", en: "Who are the authors of the Six Books?" },
+                back: { ar: "الْبُخَارِيّ، مُسْلِم، أَبُو دَاوُد، التِّرْمِذِيّ، النَّسَائِيّ، وَابْن مَاجَه.", id: "Al-Bukhari, Muslim, Abu Dawud, At-Tirmidzi, An-Nasa'i, dan Ibnu Majah.", en: "Al-Bukhari, Muslim, Abu Dawud, At-Tirmidzi, An-Nasa'i, and Ibn Mageh." }
+            },
+            {
+                front: { ar: "مَا هِيَ نَوَاقِضُ الْوُضُوْءِ؟", id: "Apa saja hal-hal yang membatalkan wudhu?", en: "What are the nullifiers of Wudu?" },
+                back: { ar: "الْخَارِجُ مِنَ السَّبِيْلَيْنِ، زَوَالُ الْعَقْلِ، أَكْلُ لَحْمِ الْإِبِلِ، وَمَسُّ الْفَرْجِ.", id: "Sesuatu yang keluar dari dua jalan, hilang akal, makan daging unta, menyentuh kemaluan.", en: "Anything exiting from the two private parts, loss of intellect, eating camel meat, touching the private part." }
+            },
+            {
+                front: { ar: "مَنْ تَعْرِفُ مِنْ عُلَمَاءِ الْمَمْلَكَةِ؟", id: "Siapa ulama Saudi yang kamu kenal?", en: "Which scholars of the Kingdom of Saudi Arabia do you know?" },
+                back: { ar: "الشَّيْخِ ابْنِ بَاز، ابْنِ عُثَيْمِيْن، الْأَلْبَانِيّ، وَصَالِح الْفَوْزَان.", id: "Syaikh Bin Baz, Ibn Utsaimin, Al-Albani, dan Shalih Al-Fawzan.", en: "Sheikh Bin Baz, Ibn Uthaymeen, Al-Albani, and Salih Al-Fawzan." }
+            },
+            {
+                front: { ar: "مَنْ هُمْ مَشَايِخُكَ فِيْ إِنْدُوْنِيْسِيَا؟", id: "Siapa gurumu di Indonesia?", en: "Who are your teachers (Mashayikh) in Indonesia?" },
+                back: { ar: "أَسَاتِذَتِيْ فِيْ الْمَعْهَدِ كَالْأُسْتَاذِ...", id: "Para asatidzah di pondok pesantren saya seperti Ustadz...", en: "My teachers at the institute such as Ustadh..." }
+            },
+            {
+                front: { ar: "لِمَاذَا اخْتَرْتَ الْجَامِعَةَ الْإِسْلَامِيَّةَ بِالْمَدِيْنَةِ؟", id: "Kenapa memilih Universitas Islam Madinah?", en: "Why did you choose the Islamic University of Madinah?" },
+                back: { ar: "لِأَنَّهَا مِنْ أَفْضَلِ الْجَامِعَاتِ، لِأَتَفَقَّهَ فِيْ الدِّيْنِ ثُمَّ أَدْعُوَ قَوْمِيْ فِيْ إِنْدُوْنِيْسِيَا.", id: "Karena ia kampus terbaik, untuk mendalami agama lalu berdakwah di negara saya.", en: "Because it is one of the best universities, to gain deep understanding of religion then invite my people in Indonesia." }
+            },
+            {
+                front: { ar: "مَا الْكُلِّيَّةُ الَّتِيْ تُرِيْدُ؟", id: "Fakultas apa yang kamu inginkan?", en: "Which college (Kulliyah) do you want to join?" },
+                back: { ar: "أُرِيْدُ أَنْ أَلْتَحِقَ بِكُلِّيَّةِ...", id: "Saya ingin bergabung dengan Fakultas... [Syari'ah/Hadis/Ushuluddin dll]", en: "I want to join the College of... [Sharia/Hadith/Usool al-Din etc]" }
+            },
+            {
+                front: { ar: "مَاذَا تَعْرِفُ عَنِ الْمَمْلَكَةِ الْعَرَبِيَّةِ السَّعُوْدِيَّةِ؟", id: "Apa yang kamu ketahui tentang Arab Saudi?", en: "What do you know about the Kingdom of Saudi Arabia?" },
+                back: { ar: "دَوْلَةٌ تُطَبِّقُ الشَّرِيْعَةَ الْإِسْلَامِيَّةَ، وَتَخْدِمُ الْحَرَمَيْنِ، وَتَنْشُرُ التَّوْحِيْدَ.", id: "Negara yang menerapkan syariat Islam, melayani Dua Tanah Haram, dan menyebarkan tauhid.", en: "A country that applies Islamic Sharia, serves the Two Holy Mosques, and spreads Tauheed." }
+            },
+            {
+                front: { ar: "كَيْفَ حَالُ الْمُجْتَمَعِ وَالْفِرَقِ فِيْ بَلَدِكَ؟", id: "Bagaimana kondisi masyarakat dan aliran di negaramu?", en: "How is the community and different groups/sects in your country?" },
+                back: { ar: "أَغْلَبُهُمْ مِنْ أَهْلِ السُّنَّةِ الشَّافِعِيَّةِ، وَالدَّعْوَةُ السَّلَفِيَّةُ تَنْتَشِرُ وَالْحَمْدُ لِلَّهِ.", id: "Mayoritas adalah Ahlus Sunnah Syafi'iyah, dan dakwah salafiyah/sunnah berkembang alhamdulillah.", en: "Most of them are Ahlus Sunnah Shafi'i, and the Salafi da'wah is spreading, Alhamdulillah." }
+            },
+            {
+                front: { ar: "مَا هِيَ أَشْهَرُ الْأَكَلَاتِ فِيْ إِنْدُوْنِيْسِيَا؟", id: "Apa makanan paling terkenal di Indonesia?", en: "What are the most famous foods in Indonesia?" },
+                back: { ar: "نَاسِي جُوْرِيْنْج (الْأَرُزُّ الْمَقْلِيُّ)، وَسَاتِي (اللَّحْمُ الْمَشْوِيُّ)، وَرِينْدَاج.", id: "Nasi Goreng, Sate, dan Rendang.", en: "Nasi Goreng (Fried rice), Sate (Grilled meat), and Rendang." }
+            },
+            {
+                front: { ar: "اِقْرَأْ مِنْ قَوْلِهِ تَعَالَى: {وَضَرَبَ لَنَا مَثَلًا وَنَسِيَ خَلْقَهُ...}", id: "Lanjutkan firman Allah: 'Wa dharaba lanaa matsalaw wa nasiya khalqah...'", en: "Continue Allah's words: 'Wa dharaba lanaa matsalaw wa nasiya khalqah...'" },
+                back: { ar: "{قَالَ مَن يُحْيِي الْعِظَامَ وَهِيَ رَمِيمٌ * قُلْ يُحْيِيهَا الَّذِي أَنشَأَهَا أَوَّلَ مَرَّةٍ...}", id: "Lanjutkan hafalan surah Yasin ayat 78-79 tersebut.", en: "Continue the memorization of Surah Yasin verses 78-79." }
+            }
+        ];
+
+        let currentIndex = 0;
+        let currentLang = 'id';
+        const cardEl = document.getElementById('flashcard');
+
+        function updateCard() {
+            cardEl.classList.remove('flipped');
+            setTimeout(() => {
+                const item = flashcardsData[currentIndex];
+                document.getElementById('front-arabic').innerText = item.front.ar;
+                document.getElementById('front-trans').innerText = item.front[currentLang];
+                
+                document.getElementById('back-arabic').innerText = item.back.ar;
+                document.getElementById('back-trans').innerText = item.back[currentLang];
+                
+                document.getElementById('progress-text').innerText = `Kartu ${currentIndex + 1} dari ${flashcardsData.length}`;
+            }, 150);
+        }
+
+        function flipCard() {
+            cardEl.classList.toggle('flipped');
+        }
+
+        function nextCard(event) {
+            event.stopPropagation();
+            currentIndex = (currentIndex + 1) % flashcardsData.length;
+            updateCard();
+        }
+
+        function prevCard(event) {
+            event.stopPropagation();
+            currentIndex = (currentIndex - 1 + flashcardsData.length) % flashcardsData.length;
+            updateCard();
+        }
+
+        function randomCard(event) {
+            event.stopPropagation();
+            currentIndex = Math.floor(Math.random() * flashcardsData.length);
+            updateCard();
+        }
+
+        function changeLanguage() {
+            currentLang = document.getElementById('langSelect').value;
+            const frontInd = document.querySelector('.card-front .side-indicator');
+            const backInd = document.querySelector('.card-back .side-indicator');
+            if(currentLang === 'en') {
+                frontInd.innerText = "Question / Sheikh";
+                backInd.innerText = "Your Answer";
+            } else {
+                frontInd.innerText = "Pertanyaan / Syaikh";
+                backInd.innerText = "Jawaban Anda";
+            }
+            updateCard();
+        }
+
+        updateCard();
+    </script>
+</body>
+</html>
