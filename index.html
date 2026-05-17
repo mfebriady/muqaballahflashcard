@@ -1,22 +1,24 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Latihan Muqabalah Flashcards</title>
+    <title>Muqabalah Master Flashcards</title>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #2c3e50;
-            --secondary: #16a085;
-            --bg: #ecf0f1;
-            --card-bg: #ffffff;
-            --text: #2c3e50;
+            --primary: #1a5f7a;
+            --secondary: #159895;
+            --accent: #54bab9;
+            --bg: #f0f2f5;
+            --card-white: #ffffff;
+            --text-dark: #2c3333;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Poppins', sans-serif;
             background-color: var(--bg);
-            color: var(--text);
+            color: var(--text-dark);
             margin: 0;
             padding: 20px;
             display: flex;
@@ -27,43 +29,61 @@
 
         header {
             text-align: center;
-            margin-bottom: 20px;
+            max-width: 800px;
+            margin-bottom: 30px;
         }
 
-        .controls {
-            margin-bottom: 20px;
+        header h1 {
+            color: var(--primary);
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .controls-panel {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
             display: flex;
-            gap: 10px;
+            gap: 20px;
             flex-wrap: wrap;
             justify-content: center;
+            width: 100%;
+            max-width: 700px;
         }
 
-        select, button {
-            padding: 10px 15px;
-            font-size: 16px;
-            border: none;
-            border-radius: 5px;
-            background-color: var(--primary);
-            color: white;
-            cursor: pointer;
-            transition: background 0.3s;
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        label {
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: #7f8c8d;
         }
 
         select {
-            background-color: white;
-            color: var(--text);
-            border: 2px solid var(--primary);
+            padding: 10px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-family: inherit;
+            cursor: pointer;
+            outline: none;
+            transition: border 0.3s;
         }
 
-        button:hover {
-            background-color: var(--secondary);
+        select:focus {
+            border-color: var(--secondary);
         }
 
-        /* Flashcard Container */
         .card-container {
-            width: 90%;
-            max-width: 550px;
-            height: 350px;
+            width: 95%;
+            max-width: 600px;
+            height: 380px;
             perspective: 1000px;
             cursor: pointer;
         }
@@ -73,9 +93,8 @@
             height: 100%;
             position: relative;
             transform-style: preserve-3d;
-            transition: transform 0.6s;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            border-radius: 15px;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 20px;
         }
 
         .card.flipped {
@@ -87,259 +106,212 @@
             width: 100%;
             height: 100%;
             backface-visibility: hidden;
-            border-radius: 15px;
+            border-radius: 20px;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 30px;
+            padding: 40px;
             box-sizing: border-box;
-            background: var(--card-bg);
+            background: var(--card-white);
             text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
         }
 
         .card-front {
-            border-top: 8px solid var(--primary);
+            border-bottom: 10px solid var(--primary);
         }
 
         .card-back {
             transform: rotateY(180deg);
-            border-top: 8px solid var(--secondary);
-            background-color: #f9fbfb;
-        }
-
-        .side-indicator {
-            position: absolute;
-            top: 15px;
-            left: 20px;
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: #7f8c8d;
+            border-bottom: 10px solid var(--secondary);
+            background-color: #f8ffff;
         }
 
         .arabic-text {
-            font-family: 'Traditional Arabic', 'Amiri', 'Cairo', serif;
-            font-size: 28px;
-            font-weight: bold;
+            font-family: 'Amiri', serif;
+            font-size: 30px;
+            font-weight: 700;
             direction: rtl;
-            margin-bottom: 15px;
-            line-height: 1.6;
+            margin-bottom: 20px;
+            line-height: 1.5;
+            color: #1a1a1a;
         }
 
         .translation-text {
-            font-size: 16px;
+            font-size: 17px;
             color: #555;
-            line-height: 1.4;
-            font-style: italic;
+            line-height: 1.6;
         }
 
-        .progress {
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        button {
+            padding: 12px 25px;
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            border-radius: 10px;
+            background-color: var(--primary);
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        button:hover {
+            background-color: var(--secondary);
+            transform: translateY(-2px);
+        }
+
+        button.btn-random {
+            background-color: #f39c12;
+        }
+
+        .progress-indicator {
             margin-top: 15px;
             font-size: 14px;
-            font-weight: bold;
+            font-weight: 600;
+            color: #7f8c8d;
+        }
+
+        .tag {
+            position: absolute;
+            top: 20px;
+            right: 25px;
+            font-size: 10px;
+            padding: 4px 10px;
+            background: #eee;
+            border-radius: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        @media (max-width: 600px) {
+            .card-container { height: 450px; }
+            .arabic-text { font-size: 24px; }
+            .translation-text { font-size: 15px; }
         }
     </style>
 </head>
 <body>
 
     <header>
-        <h2>Latihan Muqabalah Flashcards</h2>
-        <p>Klik kartu untuk membalik, gunakan tombol untuk navigasi.</p>
+        <h1>Muqabalah Master Flashcards</h1>
+        <p>Interactive preparation platform for the Islamic University of Madinah interviews.</p>
     </header>
 
-    <div class="controls">
-        <label for="langSelect">Bahasa Terjemahan: </label>
-        <select id="langSelect" onchange="changeLanguage()">
-            <option value="id">Indonesia</option>
-            <option value="en">English</option>
-        </select>
+    <div class="controls-panel">
+        <div class="control-group">
+            <label>Select Question Set</label>
+            <select id="setSelect" onchange="changeSet()">
+            </select>
+        </div>
+        <div class="control-group">
+            <label>Translation Language</label>
+            <select id="langSelect" onchange="renderCard()">
+                <option value="en">English Translation</option>
+                <option value="id">Bahasa Indonesia</option>
+            </select>
+        </div>
     </div>
 
     <div class="card-container" onclick="flipCard()">
         <div class="card" id="flashcard">
-            <!-- Front Face -->
             <div class="card-face card-front">
-                <span class="side-indicator">Pertanyaan / Syaikh</span>
+                <span class="tag" id="tag-front">Question</span>
                 <div class="arabic-text" id="front-arabic"></div>
                 <div class="translation-text" id="front-trans"></div>
             </div>
-            <!-- Back Face -->
             <div class="card-face card-back">
-                <span class="side-indicator">Jawaban Anda</span>
+                <span class="tag" id="tag-back">Answer</span>
                 <div class="arabic-text" id="back-arabic"></div>
                 <div class="translation-text" id="back-trans"></div>
             </div>
         </div>
     </div>
 
-    <div class="progress" id="progress-text">Kartu 1 dari 25</div>
+    <div class="progress-indicator" id="progressText">Card 1 / 25</div>
 
-    <div class="controls" style="margin-top: 20px;">
-        <button onclick="prevCard(event)">◄ Sebelumnya</button>
-        <button onclick="randomCard(event)">Acak 🎲</button>
-        <button onclick="nextCard(event)">Selanjutnya ►</button>
+    <div class="nav-buttons">
+        <button onclick="prevCard(event)">Previous</button>
+        <button class="btn-random" onclick="shuffleCard(event)">Shuffle</button>
+        <button onclick="nextCard(event)">Next</button>
     </div>
 
     <script>
-        const flashcardsData = [
-            {
-                front: { ar: "مَا رَقْمُ تَسْجِيْلِكَ / رَقْمُ اسْتِمَارَتِكَ؟", id: "Berapa nomor pendaftaranmu?", en: "What is your registration number?" },
-                back: { ar: "رَقْمُ تَسْجِيْلِيْ هُوَ...", id: "Nomor pendaftaran saya adalah... [Sebutkan angka dalam bahasa Arab]", en: "My registration number is... [State numbers in Arabic]" }
-            },
-            {
-                front: { ar: "عَرِّفْ بِنَفْسِكَ بِالتَّفْصِيْلِ!", id: "Perkenalkan dirimu secara rinci!", en: "Introduce yourself in detail!" },
-                back: { ar: "اِسْمِيْ... وُلِدْتُ فِيْ... عُمْرِيْ... تَخَرَّجْتُ مِنْ... وَقَدْ حَفِظْتُ...", id: "Nama saya... Lahir di... Umur... Lulusan... Hafalan...", en: "My name is... Born in... Age... Graduated from... Memorized..." }
-            },
-            {
-                front: { ar: "مِنْ أَيْنَ أَنْتَ؟ وَكَيْفَ حَالُ بَلَدِكَ؟", id: "Kamu dari mana? Dan bagaimana kondisi negaramu?", en: "Where are you from? And how is the condition of your country?" },
-                back: { ar: "أَنَا مِنْ إِنْدُوْنِيْسِيَا، مِنْ مَدِيْنَةِ... وَالْحَمْدُ لِلَّهِ بَلَدِيْ فِيْ أَمْنٍ وَأَمَانٍ.", id: "Saya dari Indonesia, kota... Alhamdulillah negara saya aman.", en: "I am from Indonesia, from city of... Alhamdulillah my country is safe and secure." }
-            },
-            {
-                front: { ar: "صُغِ اسْمَ الْفَاعِلِ مِنْ فِعْلِ 'كَتَبَ'!", id: "Bentuklah Isim Fa'il dari kata 'Kataba'!", en: "Form the Active Participle (Ism al-Fa'il) of the verb 'Kataba'!" },
-                back: { ar: "كَاتِبٌ", id: "Katibun (Orang yang menulis)", en: "Katibun (The writer)" }
-            },
-            {
-                front: { ar: "صُغِ اسْمَ الْمَفْعُوْلِ مِنْ فِعْلِ 'كَتَبَ'!", id: "Bentuklah Isim Maf'ul dari kata 'Kataba'!", en: "Form the Passive Participle (Ism al-Maf'ul) of the verb 'Kataba'!" },
-                back: { ar: "مَكْتُوْبٌ", id: "Maktubun (Sesuatu yang ditulis)", en: "Maktubun (The written thing)" }
-            },
-            {
-                front: { ar: "صُغِ اسْمَ الْفَاعِلِ مِنْ فِعْلِ 'نَصَرَ'!", id: "Bentuklah Isim Fa'il dari kata 'Nasara'!", en: "Form the Active Participle (Ism al-Fa'il) of the verb 'Nasara'!" },
-                back: { ar: "نَاصِرٌ", id: "Naashirun (Orang yang menolong)", en: "Naashirun (The helper)" }
-            },
-            {
-                front: { ar: "صُغِ اسْمَ الْمَفْعُوْلِ مِنْ فِعْلِ 'نَصَرَ'!", id: "Bentuklah Isim Maf'ul dari kata 'Nasara'!", en: "Form the Passive Participle (Ism al-Maf'ul) of the verb 'Nasara'!" },
-                back: { ar: "مَنْصُوْرٌ", id: "Manshuurun (Orang/sesuatu yang ditolong)", en: "Manshuurun (The one who is helped)" }
-            },
-            {
-                front: { ar: "مَا هِيَ عَلَامَةُ الرَّفْعِ فِيْ جَمْعِ الْمُذَكَّرِ السَّالِمِ؟", id: "Apa tanda rafa' pada Jamak Mudzakkar Salim?", en: "What is the sign of Raf' in Sound Masculine Plural (Jam' Mudhakkar Salim)?" },
-                back: { ar: "عَلَامَةُ الرَّفْعِ فِيْهِ هِيَ الْوَاوُ.", id: "Tanda rafa'nya adalah huruf Wawu.", en: "The sign of Raf' in it is the letter Waw." }
-            },
-            {
-                front: { ar: "مَثِّلْ لِجَمْعِ الْمُذَكَّرِ السَّالِمِ الْمَرْفُوْعِ!", id: "Berikan contoh Jamak Mudzakkar Salim yang Marfu'!", en: "Give an example of a Marfu' Sound Masculine Plural!" },
-                back: { ar: "جَاءَ الْمُسْلِمُوْنَ.", id: "Jaa'al-muslimuun (Telah datang orang-orang muslim).", en: "Jaa'al-muslimuun (The muslims came)." }
-            },
-            {
-                front: { ar: "كَمْ حَفِظْتَ مِنَ الْقُرْآنِ الْكَرِيْمِ؟", id: "Berapa banyak hafalan Al-Qur'anmu?", en: "How much of the Holy Qur'an have you memorized?" },
-                back: { ar: "حَفِظْتُ [jumlah] أَجْزَاءٍ، وَالْحَمْدُ لِلَّهِ.", id: "Saya hafal [jumlah] juz, alhamdulillah.", en: "I have memorized [number] Juz, Alhamdulillah." }
-            },
-            {
-                front: { ar: "اِقْرَأْ مِنْ بِدَايَةِ سُوْرَةِ عَبَسَ!", id: "Bacalah dari awal surat 'Abasa!", en: "Recite from the beginning of Surah 'Abasa!" },
-                back: { ar: "(عَـبَـسَ وَتَوَلَّىٰ...)", id: "Membaca Ta'awudz, Basmalah, lalu mulai. Pastikan tajwid benar.", en: "Recite Ta'awwudh, Basmalah, then begin. Ensure proper Tajweed." }
-            },
-            {
-                front: { ar: "مَا مَعْنَى قَوْلِهِ تَعَالَى: {الصَّمَدُ} فِيْ سُوْرَةِ الْإِخْلَاصِ؟", id: "Apa makna firman Allah 'Ash-Shamad' dalam surat Al-Ikhlash?", en: "What is the meaning of Allah's statement 'Ash-Shamad' in Surah Al-Ikhlas?" },
-                back: { ar: "هُوَ السَّيِّدُ الَّذِيْ يَصْمُدُ إِلَيْهِ الْخَلَائِقُ فِيْ حَوَائِجِهِمْ، الَّذِيْ لَا جَوْفَ لَهُ.", id: "Tuan Yang dituju seluruh makhluk untuk kebutuhan mereka, Yang tidak berongga.", en: "The Master to Whom all creatures turn for their needs, The One Who has no cavity." }
-            },
-            {
-                front: { ar: "مَا هُوَ التَّصَوُّفُ؟", id: "Apa itu Tasawuf?", en: "What is Sufism (Tasawwuf)?" },
-                back: { ar: "التَّصَوُّفُ فِيْ أَصْلِهِ قَدْ يُقْصَدُ بِهِ تَزْكِيَةُ النَّفْسِ، وَلَكِنْ دَخَلَتْ عَلَيْهِ بِدَعٌ وَانْحِرَافَاتٌ.", id: "Pada asalnya dimaksudkan untuk penyucian jiwa, namun telah kemasukan bid'ah dan penyimpangan.", en: "Originally it meant purification of the soul, but innovations and deviations have entered it." }
-            },
-            {
-                front: { ar: "اُذْكُرْ بَعْضَ الْكَبَائِرِ مَعَ الدَّلِيْلِ!", id: "Sebutkan beberapa dosa besar beserta dalilnya!", en: "Mention some major sins along with the evidence!" },
-                back: { ar: "الشِّرْكُ، السِّحْرُ، قَتْلُ النَّفْسِ، أَكْلُ الرِّبَا. الدَّلِيْلُ: 'اجْتَنِبُوا السَّبْعَ الْمُوْبِقَاتِ...'", id: "Syirik, sihir, membunuh jiwa, riba. Dalil: 'Jauhilah tujuh hal yang membinasakan...'", en: "Shirk, magic, killing a soul, consuming Riba. Evidence: 'Avoid the seven destructive sins...'" }
-            },
-            {
-                front: { ar: "مَا هِيَ الْكُتُبُ السِّتَّةُ؟", id: "Apa itu Kutubus Sittah?", en: "What are the Six Books (Al-Kutub As-Sittah)?" },
-                back: { ar: "هِيَ أَشْهَرُ كُتُبِ الْحَدِيْثِ عِنْدَ أَهْلِ السُّنَّةِ.", id: "Enam kitab hadis paling masyhur di kalangan Ahlus Sunnah.", en: "The six most famous books of Hadith among Ahlus Sunnah." }
-            },
-            {
-                front: { ar: "مَنْ هُمْ مُؤَلِّفُوْا الْكُتُبِ السِّتَّةِ؟", id: "Siapa saja penulis kitab Kutubus Sittah?", en: "Who are the authors of the Six Books?" },
-                back: { ar: "الْبُخَارِيّ، مُسْلِم، أَبُو دَاوُد، التِّرْمِذِيّ، النَّسَائِيّ، وَابْن مَاجَه.", id: "Al-Bukhari, Muslim, Abu Dawud, At-Tirmidzi, An-Nasa'i, dan Ibnu Majah.", en: "Al-Bukhari, Muslim, Abu Dawud, At-Tirmidzi, An-Nasa'i, and Ibn Mageh." }
-            },
-            {
-                front: { ar: "مَا هِيَ نَوَاقِضُ الْوُضُوْءِ؟", id: "Apa saja hal-hal yang membatalkan wudhu?", en: "What are the nullifiers of Wudu?" },
-                back: { ar: "الْخَارِجُ مِنَ السَّبِيْلَيْنِ، زَوَالُ الْعَقْلِ، أَكْلُ لَحْمِ الْإِبِلِ، وَمَسُّ الْفَرْجِ.", id: "Sesuatu yang keluar dari dua jalan, hilang akal, makan daging unta, menyentuh kemaluan.", en: "Anything exiting from the two private parts, loss of intellect, eating camel meat, touching the private part." }
-            },
-            {
-                front: { ar: "مَنْ تَعْرِفُ مِنْ عُلَمَاءِ الْمَمْلَكَةِ؟", id: "Siapa ulama Saudi yang kamu kenal?", en: "Which scholars of the Kingdom of Saudi Arabia do you know?" },
-                back: { ar: "الشَّيْخِ ابْنِ بَاز، ابْنِ عُثَيْمِيْن، الْأَلْبَانِيّ، وَصَالِح الْفَوْزَان.", id: "Syaikh Bin Baz, Ibn Utsaimin, Al-Albani, dan Shalih Al-Fawzan.", en: "Sheikh Bin Baz, Ibn Uthaymeen, Al-Albani, and Salih Al-Fawzan." }
-            },
-            {
-                front: { ar: "مَنْ هُمْ مَشَايِخُكَ فِيْ إِنْدُوْنِيْسِيَا؟", id: "Siapa gurumu di Indonesia?", en: "Who are your teachers (Mashayikh) in Indonesia?" },
-                back: { ar: "أَسَاتِذَتِيْ فِيْ الْمَعْهَدِ كَالْأُسْتَاذِ...", id: "Para asatidzah di pondok pesantren saya seperti Ustadz...", en: "My teachers at the institute such as Ustadh..." }
-            },
-            {
-                front: { ar: "لِمَاذَا اخْتَرْتَ الْجَامِعَةَ الْإِسْلَامِيَّةَ بِالْمَدِيْنَةِ؟", id: "Kenapa memilih Universitas Islam Madinah?", en: "Why did you choose the Islamic University of Madinah?" },
-                back: { ar: "لِأَنَّهَا مِنْ أَفْضَلِ الْجَامِعَاتِ، لِأَتَفَقَّهَ فِيْ الدِّيْنِ ثُمَّ أَدْعُوَ قَوْمِيْ فِيْ إِنْدُوْنِيْسِيَا.", id: "Karena ia kampus terbaik, untuk mendalami agama lalu berdakwah di negara saya.", en: "Because it is one of the best universities, to gain deep understanding of religion then invite my people in Indonesia." }
-            },
-            {
-                front: { ar: "مَا الْكُلِّيَّةُ الَّتِيْ تُرِيْدُ؟", id: "Fakultas apa yang kamu inginkan?", en: "Which college (Kulliyah) do you want to join?" },
-                back: { ar: "أُرِيْدُ أَنْ أَلْتَحِقَ بِكُلِّيَّةِ...", id: "Saya ingin bergabung dengan Fakultas... [Syari'ah/Hadis/Ushuluddin dll]", en: "I want to join the College of... [Sharia/Hadith/Usool al-Din etc]" }
-            },
-            {
-                front: { ar: "مَاذَا تَعْرِفُ عَنِ الْمَمْلَكَةِ الْعَرَبِيَّةِ السَّعُوْدِيَّةِ؟", id: "Apa yang kamu ketahui tentang Arab Saudi?", en: "What do you know about the Kingdom of Saudi Arabia?" },
-                back: { ar: "دَوْلَةٌ تُطَبِّقُ الشَّرِيْعَةَ الْإِسْلَامِيَّةَ، وَتَخْدِمُ الْحَرَمَيْنِ، وَتَنْشُرُ التَّوْحِيْدَ.", id: "Negara yang menerapkan syariat Islam, melayani Dua Tanah Haram, dan menyebarkan tauhid.", en: "A country that applies Islamic Sharia, serves the Two Holy Mosques, and spreads Tauheed." }
-            },
-            {
-                front: { ar: "كَيْفَ حَالُ الْمُجْتَمَعِ وَالْفِرَقِ فِيْ بَلَدِكَ؟", id: "Bagaimana kondisi masyarakat dan aliran di negaramu?", en: "How is the community and different groups/sects in your country?" },
-                back: { ar: "أَغْلَبُهُمْ مِنْ أَهْلِ السُّنَّةِ الشَّافِعِيَّةِ، وَالدَّعْوَةُ السَّلَفِيَّةُ تَنْتَشِرُ وَالْحَمْدُ لِلَّهِ.", id: "Mayoritas adalah Ahlus Sunnah Syafi'iyah, dan dakwah salafiyah/sunnah berkembang alhamdulillah.", en: "Most of them are Ahlus Sunnah Shafi'i, and the Salafi da'wah is spreading, Alhamdulillah." }
-            },
-            {
-                front: { ar: "مَا هِيَ أَشْهَرُ الْأَكَلَاتِ فِيْ إِنْدُوْنِيْسِيَا؟", id: "Apa makanan paling terkenal di Indonesia?", en: "What are the most famous foods in Indonesia?" },
-                back: { ar: "نَاسِي جُوْرِيْنْج (الْأَرُزُّ الْمَقْلِيُّ)، وَسَاتِي (اللَّحْمُ الْمَشْوِيُّ)، وَرِينْدَاج.", id: "Nasi Goreng, Sate, dan Rendang.", en: "Nasi Goreng (Fried rice), Sate (Grilled meat), and Rendang." }
-            },
-            {
-                front: { ar: "اِقْرَأْ مِنْ قَوْلِهِ تَعَالَى: {وَضَرَبَ لَنَا مَثَلًا وَنَسِيَ خَلْقَهُ...}", id: "Lanjutkan firman Allah: 'Wa dharaba lanaa matsalaw wa nasiya khalqah...'", en: "Continue Allah's words: 'Wa dharaba lanaa matsalaw wa nasiya khalqah...'" },
-                back: { ar: "{قَالَ مَن يُحْيِي الْعِظَامَ وَهِيَ رَمِيمٌ * قُلْ يُحْيِيهَا الَّذِي أَنشَأَهَا أَوَّلَ مَرَّةٍ...}", id: "Lanjutkan hafalan surah Yasin ayat 78-79 tersebut.", en: "Continue the memorization of Surah Yasin verses 78-79." }
-            }
-        ];
-
+        const allData = {"Set 1: Introduction & Administration": [{"front": {"ar": "\u0645\u0627 \u0631\u0642\u0645 \u062a\u0633\u062c\u064a\u0644\u0643\u061f", "id": "Berapa nomor pendaftaranmu?", "en": "What is your registration number?"}, "back": {"ar": "\u0631\u0642\u0645 \u062a\u0633\u062c\u064a\u0644\u064a \u0647\u0648...", "id": "Sebutkan angka Arab satu-per-satu.", "en": "State the numbers one by one in Arabic."}}, {"front": {"ar": "\u0639\u0631\u0641 \u0628\u0646\u0641\u0633\u0643 \u0628\u0627\u0644\u062a\u0641\u0635\u064a\u0644!", "id": "Perkenalkan dirimu secara rinci!", "en": "Introduce yourself in detail!"}, "back": {"ar": "\u0627\u0633\u0645\u064a... \u0648\u0644\u062f\u062a \u0641\u064a... \u0639\u0645\u0631\u064a... \u062a\u062e\u0631\u062c\u062a \u0645\u0646...", "id": "Sebutkan nama, tempat lahir, umur, dan asal sekolah.", "en": "State name, birth place, age, and school background."}}, {"front": {"ar": "\u0645\u0646 \u0623\u064a \u0645\u062f\u064a\u0646\u0629 \u0623\u0646\u062a\u061f", "id": "Dari kota mana kamu berasal?", "en": "Which city are you from?"}, "back": {"ar": "\u0623\u0646\u0627 \u0645\u0646 \u0645\u062f\u064a\u0646\u0629... \u0641\u064a \u0645\u0642\u0627\u0637\u0639\u0629...", "id": "Sebutkan kota dan provinsi.", "en": "State city and province."}}, {"front": {"ar": "\u0643\u0645 \u062c\u0632\u0621\u0627 \u062d\u0641\u0638\u062a \u0645\u0646 \u0627\u0644\u0642\u0631\u0622\u0646\u061f", "id": "Berapa juz Al-Qur'an yang kamu hafal?", "en": "How many Juz of the Quran have you memorized?"}, "back": {"ar": "\u062d\u0641\u0638\u062a... \u0623\u062c\u0632\u0627\u0621 \u0648\u0644\u0644\u0647 \u0627\u0644\u062d\u0645\u062f.", "id": "Sebutkan jumlah juz dengan benar.", "en": "State the number of Juz correctly."}}, {"front": {"ar": "\u0645\u0627 \u0647\u0648 \u0645\u0633\u062a\u0648\u0627\u0643 \u0641\u064a \u0627\u0644\u0644\u063a\u0629 \u0627\u0644\u0639\u0631\u0628\u064a\u0629\u061f", "id": "Bagaimana level Bahasa Arabmu?", "en": "What is your Arabic language level?"}, "back": {"ar": "\u0623\u0646\u0627 \u0637\u0627\u0644\u0628 \u0645\u0628\u062a\u062f\u0626 / \u0645\u062a\u0648\u0633\u0637 \u0648\u0623\u0633\u0639\u0649 \u0644\u0644\u062a\u0637\u0648\u064a\u0631.", "id": "Saya pemula / menengah dan ingin berkembang.", "en": "I am a beginner / intermediate and seek to improve."}}, {"front": {"ar": "\u0623\u064a\u0646 \u062a\u0639\u0644\u0645\u062a \u0627\u0644\u0644\u063a\u0629 \u0627\u0644\u0639\u0631\u0628\u064a\u0629\u061f", "id": "Di mana kamu belajar Bahasa Arab?", "en": "Where did you learn Arabic?"}, "back": {"ar": "\u062a\u0639\u0644\u0645\u062a \u0641\u064a \u0645\u0639\u0647\u062f... \u0641\u064a \u0645\u062f\u064a\u0646\u0629...", "id": "Sebutkan nama pesantren/lembaga.", "en": "State the name of the institute/school."}}, {"front": {"ar": "\u0645\u0646 \u0647\u0648 \u0645\u062f\u064a\u0631 \u0645\u062f\u0631\u0633\u062a\u0643\u061f", "id": "Siapa kepala sekolahmu?", "en": "Who is your school principal?"}, "back": {"ar": "\u0645\u062f\u064a\u0631 \u0645\u062f\u0631\u0633\u062a\u064a \u0647\u0648 \u0627\u0644\u0623\u0633\u062a\u0627\u0630...", "id": "Sebutkan nama lengkap kepala sekolah.", "en": "State the full name of the principal."}}, {"front": {"ar": "\u0645\u062a\u0649 \u062a\u062e\u0631\u062c\u062a \u0645\u0646 \u0627\u0644\u0645\u062f\u0631\u0633\u0629\u061f", "id": "Kapan kamu lulus sekolah?", "en": "When did you graduate from school?"}, "back": {"ar": "\u062a\u062e\u0631\u062c\u062a \u0641\u064a \u0633\u0646\u0629... \u0645\u064a\u0644\u0627\u062f\u064a\u0629.", "id": "Sebutkan tahun kelulusan masehi.", "en": "State the graduation year (AD)."}}, {"front": {"ar": "\u0647\u0644 \u0647\u0630\u0647 \u0623\u0648\u0644 \u0645\u0631\u0629 \u062a\u0642\u062f\u0645 \u0641\u064a\u0647\u0627\u061f", "id": "Apakah ini pertama kali kamu mendaftar?", "en": "Is this your first time applying?"}, "back": {"ar": "\u0646\u0639\u0645\u060c \u0647\u0630\u0647 \u0647\u064a \u0627\u0644\u0645\u0631\u0629 \u0627\u0644\u0623\u0648\u0644\u0649. / \u0644\u0627\u060c \u062a\u0642\u062f\u0645\u062a \u0645\u0646 \u0642\u0628\u0644.", "id": "Ya, pertama kali. / Tidak, sebelumnya sudah.", "en": "Yes, first time. / No, I applied before."}}, {"front": {"ar": "\u0645\u0627 \u0647\u0648 \u062a\u062e\u0635\u0635\u0643 \u0641\u064a \u0627\u0644\u062b\u0627\u0646\u0648\u064a\u0629\u061f", "id": "Apa jurusanmu saat SMA?", "en": "What was your major in high school?"}, "back": {"ar": "\u062a\u062e\u0635\u0635\u064a \u0643\u0627\u0646 \u0627\u0644\u0639\u0644\u0648\u0645 \u0627\u0644\u0634\u0631\u0639\u064a\u0629 / \u0627\u0644\u0639\u0644\u0648\u0645 \u0627\u0644\u0637\u0628\u064a\u0639\u064a\u0629.", "id": "Jurusan Keagamaan / IPA.", "en": "Religious Sciences / Natural Sciences."}}, {"front": {"ar": "\u0647\u0644 \u0648\u0627\u0644\u062f\u0643 \u064a\u0648\u0627\u0641\u0642 \u0639\u0644\u0649 \u0633\u0641\u0631\u0643\u061f", "id": "Apakah ayahmu setuju kamu pergi?", "en": "Does your father agree with your travel?"}, "back": {"ar": "\u0646\u0639\u0645\u060c \u0648\u0627\u0644\u062f\u064a \u064a\u0634\u062c\u0639\u0646\u064a \u062c\u062f\u0627 \u0639\u0644\u0649 \u0637\u0644\u0628 \u0627\u0644\u0639\u0644\u0645.", "id": "Ya, ayah saya sangat mendukung.", "en": "Yes, my father encourages me to seek knowledge."}}, {"front": {"ar": "\u0645\u0627 \u0645\u0647\u0646\u0629 \u0648\u0627\u0644\u062f\u0643\u061f", "id": "Apa pekerjaan ayahmu?", "en": "What is your father's occupation?"}, "back": {"ar": "\u0648\u0627\u0644\u062f\u064a \u064a\u0639\u0645\u0644... (\u062a\u0627\u062c\u0631 / \u0641\u0644\u0627\u062d / \u0645\u062f\u0631\u0633).", "id": "Ayah saya bekerja sebagai...", "en": "My father works as a..."}}, {"front": {"ar": "\u0647\u0644 \u0639\u0646\u062f\u0643 \u0625\u062e\u0648\u0629 \u064a\u062f\u0631\u0633\u0648\u0646 \u0647\u0646\u0627\u061f", "id": "Apakah kamu punya saudara yang belajar di sini?", "en": "Do you have siblings studying here?"}, "back": {"ar": "\u0646\u0639\u0645\u060c \u0623\u062e\u064a \u064a\u062f\u0631\u0633 \u0641\u064a \u0643\u0644\u064a\u0629... / \u0644\u0627\u060c \u0644\u0627 \u064a\u0648\u062c\u062f.", "id": "Ya, di fakultas... / Tidak ada.", "en": "Yes, in the faculty of... / No."}}, {"front": {"ar": "\u0644\u0645\u0627\u0630\u0627 \u062a\u0631\u064a\u062f \u0627\u0644\u062f\u0631\u0627\u0633\u0629 \u0641\u064a \u0627\u0644\u0645\u062f\u064a\u0646\u0629\u061f", "id": "Kenapa ingin belajar di Madinah?", "en": "Why do you want to study in Madinah?"}, "back": {"ar": "\u0644\u0623\u0646\u0647\u0627 \u0645\u062f\u064a\u0646\u0629 \u0627\u0644\u0631\u0633\u0648\u0644 \ufdfa \u0648\u0641\u064a\u0647\u0627 \u0643\u0628\u0627\u0631 \u0627\u0644\u0639\u0644\u0645\u0627\u0621.", "id": "Karena ini kota Rasul dan ada ulama besar.", "en": "Because it's the Prophet's city and has great scholars."}}, {"front": {"ar": "\u0643\u064a\u0641 \u0639\u0631\u0641\u062a \u0639\u0646 \u0647\u0630\u0647 \u0627\u0644\u062c\u0627\u0645\u0639\u0629\u061f", "id": "Bagaimana kamu tahu tentang kampus ini?", "en": "How did you know about this university?"}, "back": {"ar": "\u0639\u0631\u0641t \u0645\u0646 \u062e\u0644\u0627\u0644 \u0627\u0644\u0625\u0646\u062a\u0631\u0646\u062a / \u0623\u0633\u062a\u0627\u0630\u064a / \u062e\u0631\u064a\u062c\u064a\u0647\u0627.", "id": "Tahu dari internet / ustadz / alumni.", "en": "I knew from the internet / my teacher / alumni."}}, {"front": {"ar": "\u0645\u0627 \u0647\u0648 \u0639\u0646\u0648\u0627\u0646\u0643 \u0627\u0644\u0643\u0627\u0645\u0644 \u0641\u064a \u0628\u0644\u062f\u0643\u061f", "id": "Apa alamat lengkapmu di negaramu?", "en": "What is your full address in your country?"}, "back": {"ar": "\u0639\u0646\u0648\u0627\u0646\u064a \u0647\u0648 \u0634\u0627\u0631\u0639... \u0642\u0631\u064a\u0629... \u0645\u062d\u0627\u0641\u0638\u0629...", "id": "Sebutkan jalan, desa, dan provinsi.", "en": "State street, village, and province."}}, {"front": {"ar": "\u0647\u0644 \u062a\u062d\u0641\u0638 \u0627\u0644\u0642\u0631\u0622\u0646 \u0643\u0627\u0645\u0644\u0627\u061f", "id": "Apakah kamu hafal Al-Qur'an lengkap?", "en": "Do you memorize the entire Quran?"}, "back": {"ar": "\u0646\u0639\u0645\u060c \u0628\u0641\u0636\u0644 \u0627\u0644\u0644\u0647. / \u0644\u0627\u060c \u062d\u0641\u0638\u062a... \u062c\u0632\u0621\u0627.", "id": "Ya, alhamdulillah. / Tidak, baru... juz.", "en": "Yes, by Allah's grace. / No, I memorized... juz."}}, {"front": {"ar": "\u0645\u0627 \u0627\u0633\u0645 \u0645\u0639\u0647\u062f\u0643 \u0628\u0627\u0644\u0644\u063a\u0629 \u0627\u0644\u0639\u0631\u0628\u064a\u0629\u061f", "id": "Apa nama pesantrenmu dalam bahasa Arab?", "en": "What is your institute's name in Arabic?"}, "back": {"ar": "\u0627\u0633\u0645 \u0645\u0639\u0647\u062f\u064a \u0647\u0648 \u0645\u0639\u0647\u062f... \u0627\u0644\u0625\u0633\u0644\u0627\u0645\u064a.", "id": "Sebutkan nama pesantren dengan jelas.", "en": "State the institute's name clearly."}}, {"front": {"ar": "\u0645\u0646 \u0647\u0648 \u0642\u062f\u0648\u062a\u0643 \u0641\u064a \u0637\u0644\u0628 \u0627\u0644\u0639\u0644\u0645\u061f", "id": "Siapa teladanmu dalam menuntut ilmu?", "en": "Who is your role model in seeking knowledge?"}, "back": {"ar": "\u0642\u062f\u0648\u062a\u064a \u0647\u0648 \u0627\u0644\u0646\u0628\u064a \ufdfa \u062b\u0645 \u0627\u0644\u0635\u062d\u0627\u0628\u0629 \u0648\u0627\u0644\u0639\u0644\u0645\u0627\u0621.", "id": "Teladan saya Nabi, Sahabat, dan Ulama.", "en": "My role model is the Prophet, then Companions and Scholars."}}, {"front": {"ar": "\u0647\u0644 \u0623\u0646\u062a \u0645\u0633\u062a\u0639\u062f \u0644\u0644\u0633\u0643\u0646 \u0627\u0644\u062c\u0627\u0645\u0639\u064a\u061f", "id": "Apakah kamu siap tinggal di asrama?", "en": "Are you ready for university housing?"}, "back": {"ar": "\u0646\u0639\u0645\u060c \u0623\u0646\u0627 \u0645\u0633\u062a\u0639\u062f \u0648\u0645\u062a\u062d\u0645\u0633 \u0644\u0644\u062a\u0639\u0644\u0645 \u0645\u0639 \u0632\u0645\u0644\u0627\u0626\u064a.", "id": "Ya, saya siap dan semangat belajar.", "en": "Yes, I am ready and excited to learn."}}, {"front": {"ar": "\u0645\u0627 \u0647\u064a \u0627\u0644\u0645\u0627\u062f\u0629 \u0627\u0644\u0645\u0641\u0636\u0644\u0629 \u0639\u0646\u062f\u0643\u061f", "id": "Apa pelajaran favoritmu?", "en": "What is your favorite subject?"}, "back": {"ar": "\u0645\u0627\u062f\u062a\u064a \u0627\u0644\u0645\u0641\u0636\u0644\u0629 \u0647\u064a \u0627\u0644\u062a\u0648\u062d\u064a\u062f / \u0627\u0644\u0641\u0642\u0647 / \u0627\u0644\u0646\u062d\u0648.", "id": "Pelajaran favorit saya Tauhid/Fiqih/Nahwu.", "en": "My favorite subject is Tauhid/Fiqh/Grammar."}}, {"front": {"ar": "\u0647\u0644 \u0633\u0628\u0642 \u0644\u0643 \u0632\u064a\u0627\u0631\u0629 \u0627\u0644\u0633\u0639\u0648\u062f\u064a\u0629\u061f", "id": "Apakah sebelumnya sudah pernah ke Saudi?", "en": "Have you visited Saudi Arabia before?"}, "back": {"ar": "\u0646\u0639\u0645\u060c \u0644\u0644\u0639\u0645\u0631\u0629. / \u0644\u0627\u060c \u0647\u0630\u0647 \u0633\u062a\u0643\u0648\u0646 \u0627\u0644\u0623\u0648\u0644\u0649.", "id": "Ya, untuk Umroh. / Belum, ini yang pertama.", "en": "Yes, for Umrah. / No, this will be the first."}}, {"front": {"ar": "\u0643\u0645 \u0633\u0646\u0629 \u062f\u0631\u0633\u062a \u0627\u0644\u0644\u063a\u0629 \u0627\u0644\u0639\u0631\u0628\u064a\u0629\u061f", "id": "Berapa tahun kamu belajar Bahasa Arab?", "en": "How many years have you studied Arabic?"}, "back": {"ar": "\u062f\u0631\u0633\u062a\u0647\u0627 \u0644\u0645\u062f\u0629... \u0633\u0646\u0648\u0627\u062a \u0641\u064a \u0627\u0644\u0645\u0639\u0647\u062f.", "id": "Saya mempelajarinya selama... tahun.", "en": "I studied it for... years."}}, {"front": {"ar": "\u0645\u0627\u0630\u0627 \u0633\u062a\u0641\u0639\u0644 \u0644\u0648 \u0644\u0645 \u062a\u0642\u0628\u0644 \u0647\u0646\u0627\u061f", "id": "Apa yang dilakukan jika tidak diterima di sini?", "en": "What will you do if not accepted here?"}, "back": {"ar": "\u0633\u0623\u0648\u0627\u0635\u0644 \u0637\u0644\u0628 \u0627\u0644\u0639\u0644\u0645 \u0641\u064a \u0628\u0644\u062f\u064a \u0648\u0623\u062d\u0627\u0648\u0644 \u0645\u062c\u062f\u062f\u0627.", "id": "Saya lanjut belajar di negeri saya dan coba lagi.", "en": "I will continue seeking knowledge in my country and try again."}}, {"front": {"ar": "\u0647\u0644 \u0639\u0646\u062f\u0643 \u062c\u0648\u0627\u0632 \u0633\u0641\u0631\u061f", "id": "Apakah kamu punya paspor?", "en": "Do you have a passport?"}, "back": {"ar": "\u0646\u0639\u0645\u060c \u0639\u0646\u062f\u064a \u062c\u0648\u0627\u0632 \u0633\u0641\u0631 \u0635\u0627\u0644\u062d.", "id": "Ya, saya punya paspor yang aktif.", "en": "Yes, I have a valid passport."}}], "Set 2: Islamic Aqeedah & Fiqh Basics": [{"front": {"ar": "\u0645\u0627 \u0647\u064a \u0623\u0631\u0643\u0627\u0646 \u0627\u0644\u0625\u064a\u0645\u0627\u0646\u061f", "id": "Apa saja rukun iman?", "en": "What are the pillars of Faith?"}, "back": {"ar": "\u0623\u0646 \u062a\u0624\u0645\u0646 \u0628\u0627\u0644\u0644\u0647\u060c \u0648\u0645\u0644\u0627\u0626\u0643\u062a\u0647\u060c \u0648\u0643\u062a\u0628\u0647\u060c \u0648\u0631\u0633\u0644\u0647\u060c \u0648\u0627\u0644\u064a\u0648\u0645 \u0627\u0644\u0622\u062e\u0631\u060c \u0648\u0627\u0644\u0642\u062f\u0631.", "id": "Iman kepada Allah, Malaikat, Kitab, Rasul, Hari Akhir, Qadar.", "en": "Belief in Allah, Angels, Books, Messengers, Last Day, and Destiny."}}, {"front": {"ar": "\u0645\u0627 \u0647\u0648 \u0627\u0644\u0625\u062d\u0633\u0627\u0646\u061f", "id": "Apa itu Ihsan?", "en": "What is Ihsan?"}, "back": {"ar": "\u0623\u0646 \u062a\u0639\u0628\u062f \u0627\u0644\u0644\u0647 \u0643\u0623\u0646\u0643 \u062a\u0631\u0627\u0647\u060c \u0641\u0625\u0646 \u0644\u0645 \u062a\u0643\u0646 \u062a\u0631\u0627\u0647 \u0641\u0625\u0646\u0647 \u064a\u0631\u0627\u0643.", "id": "Beribadah seolah melihat-Nya, jika tidak, yakin Dia melihatmu.", "en": "To worship Allah as if you see Him; if you don't, He sees you."}}, {"front": {"ar": "\u0645\u0627 \u0647\u064a \u0623\u0646\u0648\u0627\u0639 \u0627\u0644\u062a\u0648\u062d\u064a\u062f\u061f", "id": "Apa saja jenis tauhid?", "en": "What are the types of Tawheed?"}, "back": {"ar": "\u062a\u0648\u062d\u064a\u062f \u0627\u0644\u0631\u0628\u0648\u0628\u064a\u0629\u060c \u0648\u0627\u0644\u0623\u0644\u0648\u0647\u064a\u0629\u060c \u0648\u0627\u0644\u0623\u0633\u0645\u0627\u0621 \u0648\u0627\u0644\u0635\u0641\u0627\u062a.", "id": "Rububiyah, Uluhiyah, dan Asma wa Sifat.", "en": "Rububiyyah, Uluhiyyah, and Asma wal-Sifat."}}, {"front": {"ar": "\u0645\u0627 \u0647\u0648 \u0627\u0644\u0634\u0631\u0643 \u0627\u0644\u0623\u0643\u0628\u0631\u061f", "id": "Apa itu syirik akbar?", "en": "What is major Shirk?"}, "back": {"ar": "\u0635\u0631\u0641 \u0627\u0644\u0639\u0628\u0627\u062f\u0629 \u0644\u063a\u064a\u0631 \u0627\u0644\u0644\u0647\u060c \u0648\u0647\u0648 \u064a\u062e\u0631\u062c \u0645\u0646 \u0627\u0644\u0645\u0644\u0629.", "id": "Memalingkan ibadah kepada selain Allah, pelakunya murtad.", "en": "Directing worship to other than Allah; it expels one from Islam."}}, {"front": {"ar": "\u0645\u0627 \u0645\u0639\u0646\u0649 \u0644\u0627 \u0625\u0644\u0647 \u0625\u0644\u0627 \u0627\u0644\u0644\u0647\u061f", "id": "Apa makna Laa ilaha illallah?", "en": "What is the meaning of La ilaha illa Allah?"}, "back": {"ar": "\u0644\u0627 \u0645\u0639\u0628\u0648\u062f \u0628\u062d\u0642 \u0625\u0644\u0627 \u0627\u0644\u0644\u0647.", "id": "Tidak ada sesembahan yang benar kecuali Allah.", "en": "There is no one worthy of worship except Allah."}}, {"front": {"ar": "\u0645\u0627 \u0647\u064a \u0634\u0631\u0648\u0637 \u0642\u0628\u0648\u0644 \u0627\u0644\u0639\u0645\u0644\u061f", "id": "Syarat diterimanya amal?", "en": "Conditions for a deed's acceptance?"}, "back": {"ar": "\u0627\u0644\u0625\u062e\u0644\u0627\u0635 \u0644\u0644\u0647\u060c \u0648\u0627\u0644\u0645\u062a\u0627\u0628\u0639\u0629 \u0644\u0644\u0646\u0628\u064a \ufdfa.", "id": "Ikhlas karena Allah dan mengikuti Sunnah Nabi.", "en": "Sincerity for Allah and following the Prophet \ufdfa."}}, {"front": {"ar": "\u0645\u0627 \u0647\u064a \u0646\u0648\u0627\u0642\u0636 \u0627\u0644\u0648\u0636\u0648\u0621\u061f", "id": "Pembatal wudhu?", "en": "Nullifiers of Wudu?"}, "back": {"ar": "\u0627\u0644\u062e\u0627\u0631\u062c \u0645\u0646 \u0627\u0644\u0633\u0628\u064a\u0644\u064a\u0646\u060c \u0632\u0648\u0627\u0644 \u0627\u0644\u0639\u0642\u0644\u060c \u0645\u0633 \u0627\u0644\u0641\u0631\u062c\u060c \u0623\u0643\u0644 \u0644\u062d\u0645 \u0627\u0644\u0625\u0628\u0644.", "id": "Keluar sesuatu dari 2 jalan, hilang akal, sentuh kemaluan, daging unta.", "en": "Exit from 2 paths, loss of sanity, touching private parts, camel meat."}}, {"front": {"ar": "\u0645\u0627 \u0647\u064a \u0634\u0631\u0648\u0637 \u0627\u0644\u0635\u0644\u0627\u0629\u061f", "id": "Apa syarat shalat?", "en": "Conditions of Prayer?"}, "back": {"ar": "\u0627\u0644\u0625\u0633\u0644\u0627\u0645\u060c \u0627\u0644\u0639\u0642\u0644\u060c \u0627\u0644\u062a\u0645\u064a\u064a\u0632\u060c \u062f\u062e\u0648\u0644 \u0627\u0644\u0648\u0642\u062a\u060c \u0633\u062a\u0631 \u0627\u0644\u0639\u0648\u0631\u0629\u060c \u0627\u0633\u062a\u0642\u0628\u0627\u0644 \u0627\u0644\u0642\u0628\u0644\u0629\u060c \u0627\u0644\u0646\u064a\u0629.", "id": "Islam, akal, tamyiz, masuk waktu, tutup aurat, kiblat, niat.", "en": "Islam, sanity, discernment, time entrance, covering awrah, Qiblah, intention."}}, {"front": {"ar": "\u0627\u0630\u0643\u0631 \u062b\u0644\u0627\u062b\u0629 \u0645\u0646 \u0623\u0631\u0643\u0627\u0646 \u0627\u0644\u0635\u0644\u0627\u0629!", "id": "Sebutkan 3 rukun shalat!", "en": "Mention 3 pillars of Prayer!"}, "back": {"ar": "\u062a\u0643\u0628\u064a\u0631\u0629 \u0627\u0644\u0625\u062d\u0631\u0627\u0645\u060c \u0642\u0631\u0627\u0621\u0629 \u0627\u0644\u0641\u0627\u062a\u062d\u0629\u060c \u0627\u0644\u0631\u0643\u0648\u0639.", "id": "Takbiratul Ihram, Fatihah, dan Ruku'.", "en": "Opening Takbir, reciting Fatihah, and Bowing."}}, {"front": {"ar": "\u0645\u0627 \u062d\u0643\u0645 \u0635\u0644\u0627\u0629 \u0627\u0644\u062c\u0645\u0627\u0639\u0629\u061f", "id": "Hukum shalat berjamaah?", "en": "Ruling on congregational prayer?"}, "back": {"ar": "\u0648\u0627\u062c\u0628\u0629 \u0639\u0644\u0649 \u0627\u0644\u0631\u062c\u0627\u0644 \u0641\u064a \u0627\u0644\u0645\u0633\u062c\u062f \u0639\u0644\u0649 \u0627\u0644\u0642\u0648\u0644 \u0627\u0644\u0631\u0627\u062c\u062d.", "id": "Wajib bagi laki-laki di masjid menurut pendapat kuat.", "en": "Obligatory for men in the mosque according to the correct view."}}, {"front": {"ar": "\u0645\u0627 \u0647\u064a \u0623\u0631\u0643\u0627\u0646 \u0627\u0644\u062d\u062c\u061f", "id": "Apa rukun haji?", "en": "What are the pillars of Hajj?"}, "back": {"ar": "\u0627\u0644\u0625\u062d\u0631\u0627\u0645\u060c \u0627\u0644\u0648\u0642\u0648\u0641 \u0628\u0639\u0631\u0641\u0629\u060c \u0637\u0648\u0627\u0641 \u0627\u0644\u0625\u0641\u0627\u0636\u0629\u060c \u0627\u0644\u0633\u0639\u064a.", "id": "Ihram, Wukuf Arafah, Thawaf Ifadhah, Sa'i.", "en": "Ihram, Standing at Arafah, Tawaf Ifadah, and Sa'i."}}, {"front": {"ar": "\u0645\u062a\u0649 \u062a\u062c\u0628 \u0627\u0644\u0632\u0643\u0627\u0629\u061f", "id": "Kapan zakat wajib?", "en": "When is Zakat obligatory?"}, "back": {"ar": "\u0625\u0630\u0627 \u0628\u0644\u063a \u0627\u0644\u0645\u0627\u0644 \u0627\u0644\u0646\u0635\u0627\u0628 \u0648\u062d\u0627\u0644 \u0639\u0644\u064a\u0647 \u0627\u0644\u062d\u0648\u0644.", "id": "Jika mencapai nishab dan melewati satu tahun (haul).", "en": "When wealth reaches the threshold (Nisab) and a year passes (Hawl)."}}, {"front": {"ar": "\u0645\u0627 \u0647\u0648 \u062a\u0639\u0631\u064a\u0641 \u0627\u0644\u0639\u0628\u0627\u062f\u0629\u061f", "id": "Apa definisi ibadah?", "en": "What is the definition of worship?"}, "back": {"ar": "\u0627\u0633\u0645 \u062c\u0627\u0645\u0639 \u0644\u0643\u0644 \u0645\u0627 \u064a\u062d\u0628\u0647 \u0627\u0644\u0644\u0647 \u0648\u064a\u0631\u0636\u0627\u0647 \u0645\u0646 \u0627\u0644\u0623\u0642\u0648\u0627\u0644 \u0648\u0627\u0644\u0623\u0639\u0645\u0627\u0644.", "id": "Nama mencakup segala yang dicintai dan diridhai Allah.", "en": "A comprehensive term for everything Allah loves and is pleased with."}}, {"front": {"ar": "\u0645\u0627 \u0647\u0648 \u0627\u0644\u062a\u0648\u0633\u0644 \u0627\u0644\u0645\u0634\u0631\u0648\u0639\u061f", "id": "Tawasul yang dibolehkan?", "en": "Legitimate Intercession (Tawassul)?"}, "back": {"ar": "\u0627\u0644\u062a\u0648\u0633\u0644 \u0628\u0623\u0633\u0645\u0627\u0621 \u0627\u0644\u0644\u0647\u060c \u0648\u0628\u0627\u0644\u0639\u0645\u0644 \u0627\u0644\u0635\u0627\u0644\u062d\u060c \u0648\u0628\u062f\u0639\u0627\u0621 \u0627\u0644\u062d\u064a \u0627\u0644\u0635\u0627\u0644\u062d.", "id": "Dengan nama Allah, amal shalih, dan doa orang shalih yang hidup.", "en": "Using Allah's names, good deeds, or the prayer of a living righteous person."}}, {"front": {"ar": "\u0645\u0627 \u0647\u064a \u0627\u0644\u0643\u0628\u0627\u0626\u0631\u061f \u0627\u0630\u0643\u0631 \u0645\u062b\u0627\u0644\u0627!", "id": "Apa itu dosa besar? Beri contoh!", "en": "What are major sins? Give an example!"}, "back": {"ar": "\u0643\u0644 \u0630\u0646\u0628 \u0641\u064a\u0647 \u062d\u062f \u0623\u0648 \u0648\u0639\u064a\u062f\u060c \u0645\u062b\u0644: \u0627\u0644\u0634\u0631\u0643\u060c \u0627\u0644\u0633\u062d\u0631\u060c \u0642\u062a\u0644 \u0627\u0644\u0646\u0641\u0633.", "id": "Dosa dengan hukuman dunia/ancaman akhirat, misal: Syirik, Sihir.", "en": "Any sin with a prescribed punishment/threat, e.g., Shirk, Magic."}}, {"front": {"ar": "\u0645\u0627 \u062d\u0643\u0645 \u0637\u0627\u0639\u0629 \u0648\u0644\u0627\u0629 \u0627\u0644\u0623\u0645\u0631\u061f", "id": "Hukum taat pemerintah?", "en": "Ruling on obeying authorities?"}, "back": {"ar": "\u0648\u0627\u062c\u0628\u0629 \u0641\u064a \u063a\u064a\u0631 \u0645\u0639\u0635\u064a\u0629 \u0627\u0644\u0644\u0647.", "id": "Wajib selama bukan dalam maksiat.", "en": "Obligatory except in disobedience to Allah."}}, {"front": {"ar": "\u0645\u0627 \u0647\u0648 \u062a\u0639\u0631\u064a\u0641 \u0627\u0644\u0633\u0646\u0629\u061f", "id": "Apa definisi Sunnah?", "en": "What is the definition of Sunnah?"}, "back": {"ar": "\u0645\u0627 \u0623\u0636\u064a\u0641 \u0625\u0644\u0649 \u0627\u0644\u0646\u0628\u064a \ufdfa \u0645\u0646 \u0642\u0648\u0644 \u0623\u0648 \u0641\u0639\u0644 \u0623\u0648 \u062a\u0642\u0631\u064a\u0631 \u0623\u0648 \u0635\u0641\u0629.", "id": "Perkataan, perbuatan, ketetapan, atau sifat Nabi.", "en": "What is attributed to the Prophet in word, deed, approval, or trait."}}, {"front": {"ar": "\u0645\u0627 \u0627\u0644\u0641\u0631\u0642 \u0628\u064a\u0646 \u0627\u0644\u0631\u0633\u0648\u0644 \u0648\u0627\u0644\u0646\u0628\u064a\u061f", "id": "Beda Rasul dan Nabi?", "en": "Difference between Messenger and Prophet?"}, "back": {"ar": "\u0627\u0644\u0631\u0633\u0648\u0644 \u0645\u0646 \u0623\u0648\u062d\u064a \u0625\u0644\u064a\u0647 \u0628\u0634\u0631\u0639 \u0648\u0623\u0645\u0631 \u0628\u062a\u0628\u0644\u064a\u063a\u0647\u060c \u0648\u0627\u0644\u0646\u0628\u064a \u0645\u0646 \u0644\u0645 \u064a\u0624\u0645\u0631 \u0628\u0627\u0644\u062a\u0628\u0644\u064a\u063a.", "id": "Rasul diutus dengan syariat baru, Nabi mengikuti syariat sebelumnya.", "en": "Messenger is sent with a new law; Prophet follows a previous one."}}, {"front": {"ar": "\u0645\u0627 \u0647\u0648 \u0627\u0633\u062a\u0647\u0632\u0627\u0621 \u0628\u0627\u0644\u062f\u064a\u0646\u061f", "id": "Menghina agama?", "en": "Mocking the religion?"}, "back": {"ar": "\u0647\u0648 \u0643\u0641\u0631 \u0645\u062e\u0631\u062c \u0645\u0646 \u0627\u0644\u0645\u0644\u0629.", "id": "Kekufuran yang mengeluarkan dari agama.", "en": "It is disbelief that expels one from the religion."}}, {"front": {"ar": "\u0645\u0627 \u0647\u064a \u0634\u0631\u0648\u0637 \u0644\u0627 \u0625\u0644\u0647 \u0625\u0644\u0627 \u0627\u0644\u0644\u0647\u061f", "id": "Syarat syahadat?", "en": "Conditions of the Shahada?"}, "back": {"ar": "\u0627\u0644\u0639\u0644\u0645\u060c \u0627\u0644\u064a\u0642\u064a\u0646\u060c \u0627\u0644\u0625\u062e\u0644\u0627\u0635\u060c \u0627\u0644\u0635\u062f\u0642\u060c \u0627\u0644\u0645\u062d\u0628\u0629\u060c \u0627\u0644\u0627\u0646\u0642\u064a\u0627\u062f\u060c \u0627\u0644\u0642\u0628\u0648\u0644.", "id": "Ilmu, Yakin, Ikhlas, Jujur, Cinta, Tunduk, Terima.", "en": "Knowledge, Certainty, Sincerity, Truth, Love, Submission, Acceptance."}}, {"front": {"ar": "\u0645\u0627 \u062d\u0643\u0645 \u0627\u0644\u0633\u062d\u0631\u061f", "id": "Hukum sihir?", "en": "Ruling on magic?"}, "back": {"ar": "\u0643\u0641\u0631 \u0648\u0645\u062d\u0631\u0645 \u0648\u0645\u0646 \u0627\u0644\u0633\u0628\u0639 \u0627\u0644\u0645\u0648\u0628\u0642\u0627\u062a.", "id": "Kufur, haram, dan termasuk 7 dosa membinasakan.", "en": "Disbelief, prohibited, and among the seven destructive sins."}}, {"front": {"ar": "\u0645\u0627 \u0647\u0648 \u0627\u0644\u0625\u064a\u0645\u0627\u0646 \u0628\u0627\u0644\u0642\u062f\u0631\uff1f", "id": "Iman kepada Takdir?", "en": "Belief in Destiny?"}, "back": {"ar": "\u0627\u0644\u062a\u0635\u062f\u064a\u0642 \u0628\u0623\u0646 \u0643\u0644 \u0645\u0627 \u064a\u0642\u0639 \u0647\u0648 \u0628\u0639\u0644\u0645 \u0627\u0644\u0644\u0647 \u0648\u0643\u062a\u0627\u0628\u062a\u0647 \u0648\u0645\u0634\u0626\u0650\u064a\u062a\u0647 \u0648\u062e\u0644\u0642\u0647.", "id": "Yakin segala hal terjadi atas ilmu, catatan, kehendak, dan ciptaan-Nya.", "en": "Belief that everything happens by Allah's knowledge, writing, will, and creation."}}, {"front": {"ar": "\u0645\u0627 \u0647\u064a \u0645\u0628\u0637\u0644\u0627\u062a \u0627\u0644\u0635\u064a\u0627\u0645\u061f", "id": "Pembatal puasa?", "en": "Nullifiers of Fasting?"}, "back": {"ar": "\u0627\u0644\u0623\u0643\u0644 \u0648\u0627\u0644\u0634\u0631\u0628 \u0639\u0645\u062f\u0627\u060c \u0627\u0644\u0642\u064a\u0621 \u0639\u0645\u062f\u0627\u060c \u0627\u0644\u062c\u0645\u0627\u0639.", "id": "Makan/minum sengaja, muntah sengaja, hubungan suami-istri.", "en": "Eating/drinking intentionally, intentional vomiting, intercourse."}}, {"front": {"ar": "\u0645\u0627 \u0647\u064a \u0634\u0631\u0648\u0637 \u0627\u0644\u0632\u0643\u0627\u0629\u061f", "id": "Syarat zakat?", "en": "Conditions for Zakat?"}, "back": {"ar": "\u0627\u0644\u0625\u0633\u0644\u0627\u0645\u060c \u0627\u0644\u062d\u0631\u064a\u0629\u060c \u0645\u0644\u0643 \u0627\u0644\u0646\u0635\u0627\u0628\u060c \u062a\u0645\u0627\u0645 \u0627\u0644\u062d\u0648\u0644.", "id": "Islam, merdeka, milik nishab, lewat satu tahun.", "en": "Islam, freedom, ownership of Nisab, completion of one year."}}, {"front": {"ar": "\u0645\u0627 \u0647\u064a \u0635\u0644\u0627\u0629 \u0627\u0644\u0643\u0633\u0648\u0641\u061f", "id": "Apa shalat gerhana?", "en": "What is the Eclipse prayer?"}, "back": {"ar": "\u0635\u0644\u0627\u0629 \u062a\u0635\u0644\u0649 \u0639\u0646\u062f \u063a\u064a\u0627\u0628 \u0636\u0648\u0621 \u0627\u0644\u0634\u0645\u0633 \u0623\u0648 \u0627\u0644\u0642\u0645\u0631\u060c \u0648\u0647\u064a \u0633\u0646\u0629 \u0645\u0624\u0643\u062f\u0629.", "id": "Shalat saat gerhana matahari/bulan, sunnah muakkadah.", "en": "Prayer performed during solar/lunar eclipse; it's a confirmed Sunnah."}}], "Set 3: Quranic Sciences & Arabic Instruments": [{"front": {"ar": "\u0643\u0645 \u0639\u062f\u062f \u0633\u0648\u0631 \u0627\u0644\u0642\u0631\u0622\u0646 \u0627\u0644\u0643\u0631\u064a\u0645\u061f", "id": "Berapa jumlah surat Al-Qur'an?", "en": "How many Surahs are in the Quran?"}, "back": {"ar": "\u0645\u0627\u0626\u0629 \u0648\u0623\u0631\u0628\u0639 \u0639\u0634\u0631\u0629 \u0633\u0648\u0631\u0629 (114).", "id": "114 Surat.", "en": "114 Surahs."}}, {"front": {"ar": "\u0645\u0627 \u0647\u064a \u0623\u0637\u0648\u0644 \u0633\u0648\u0631\u0629 \u0648\u0623\u0642\u0635\u0631 \u0633\u0648\u0631\u0629\u061f", "id": "Surat terpanjang dan terpendek?", "en": "Longest and shortest Surah?"}, "back": {"ar": "\u0623\u0637\u0648\u0644\u0647\u0627 \u0627\u0644\u0628\u0642\u0631\u0629\u060c \u0648\u0623\u0642\u0635\u0631\u0647\u0627 \u0627\u0644\u0643\u0648\u062b\u0631.", "id": "Terpanjang Al-Baqarah, terpendek Al-Kautsar.", "en": "Longest is Al-Baqarah, shortest is Al-Kawthar."}}, {"front": {"ar": "\u0645\u0627 \u0647\u064a \u0627\u0644\u0633\u0648\u0631\u0629 \u0627\u0644\u062a\u064a \u062a\u0633\u0645\u0649 \u0639\u0631\u0648\u0633 \u0627\u0644\u0642\u0631\u0622\u0646\u061f", "id": "Surat apa 'Arusul Qur'an'?", "en": "Which Surah is 'The Bride of the Quran'?"}, "back": {"ar": "\u0633\u0648\u0631\u0629 \u0627\u0644\u0631\u062d\u0645\u0646.", "id": "Surat Ar-Rahman.", "en": "Surah Ar-Rahman."}}, {"front": {"ar": "\u0627\u0630\u0643\u0631 \u062a\u0639\u0631\u064a\u0641\u0627 \u0645\u0648\u062c\u0632\u0627 \u0644\u0639\u0644\u0645 \u0627\u0644\u0646\u062d\u0648!", "id": "Definisi singkat ilmu Nahwu!", "en": "Brief definition of Nahwu!"}, "back": {"ar": "\u0647\u0648 \u0639\u0644\u0645 \u064a\u0628\u062d\u062b \u0641\u064a \u0623\u062d\u0648\u0627\u0644 \u0623\u0648\u0627\u062e\u0631 \u0627\u0644\u0643\u0644\u0645\u0627\u062a \u0625\u0639\u0631\u0627\u0628\u0627 \u0648\u0628\u0646\u0627\u0621.", "id": "Ilmu membahas keadaan akhir kata (i'rab/bina).", "en": "The science studying the final states of words (inflection/building)."}}, {"front": {"ar": "\u0645\u0627 \u0647\u0648 \u0627\u0644\u0641\u0627\u0639\u0644\uff1f", "id": "Apa itu Fa'il?", "en": "What is the Subject (Fa'il)?"}, "back": {"ar": "\u0647\u0648 \u0627\u0633\u0645 \u0645\u0631\u0641\u0648\u0639 \u062a\u0642\u062f\u0645\u0647 \u0641\u0639\u0644 \u0648\u062f\u0644 \u0639\u0644\u0649 \u0645\u0646 \u0641\u0639\u0644 \u0627\u0644\u0641\u0639\u0644.", "id": "Isim marfu' yang diawali fi'il dan menunjuk pelaku.", "en": "A nominative noun preceded by a verb, indicating the doer."}}, {"front": {"ar": "\u0645\u0627 \u0647\u064a \u062d\u0631\u0648\u0641 \u0627\u0644\u062c\u0631\u061f", "id": "Apa saja huruf Jar?", "en": "What are the Prepositions (Huruf al-Jar)?"}, "back": {"ar": "\u0645\u0646\u060c \u0625\u0644\u0649\u060c \u0639\u0646\u060c \u0639\u0644\u0649\u060c \u0641\u064a\u060c \u0631\u0628\u060c \u0627\u0644\u0643\u0627\u0641\u060c \u0627\u0644\u0644\u0627\u0645\u060c \u0627\u0644\u0628\u0627\u0621.", "id": "Min, Ila, 'An, 'Ala, Fi, dsb.", "en": "From, To, About, On, In, etc."}}, {"front": {"ar": "\u0635\u063a \u0627\u0633\u0645 \u0627\u0644\u0641\u0627\u0639\u0644 \u0645\u0646 \u0641\u0639\u0644 '\u0633\u0645\u0639'!", "id": "Isim Fa'il dari 'Sami'a'?", "en": "Active Participle of 'Sami'a'?"}, "back": {"ar": "\u0633\u0627\u0645\u0639.", "id": "Saami'un.", "en": "Sami'un."}}, {"front": {"ar": "\u0645\u0627 \u0647\u0648 \u0627\u0644\u0642\u0631\u0622\u0646 \u0627\u0644\u0643\u0631\u064a\u0645\u061f", "id": "Apa itu Al-Qur'an?", "en": "What is the Holy Quran?"}, "back": {"ar": "\u0643\u0644\u0627\u0645 \u0627\u0644\u0644\u0647\u060c \u0627\u0644\u0645\u0646\u0632\u0644 \u0639\u0644\u0649 \u0645\u062d\u0645\u062f \ufdfa\u060c \u0627\u0644\u0645\u062a\u0639\u0628\u062f \u0628\u062a\u0644\u0627\u0648\u062a\u0647.", "id": "Kalamullah, turun kepada Nabi Muhammad, ibadah membacanya.", "en": "Speech of Allah, revealed to Muhammad \ufdfa, worship through recitation."}}, {"front": {"ar": "\u0645\u0627 \u0645\u0639\u0646\u0649 '\u062a\u062c\u0648\u064a\u062f' \u0627\u0644\u0642\u0631\u0622\u0646\u061f", "id": "Makna Tajwid?", "en": "Meaning of Tajweed?"}, "back": {"ar": "\u0625\u0639\u0637\u0627\u0621 \u0643\u0644 \u062d\u0631\u0641 \u062d\u0642\u0647 \u0648\u0645\u0633\u062a\u062d\u0642\u0647 \u0645\u0646 \u0627\u0644\u0645\u062e\u0627\u0631\u062c \u0648\u0627\u0644\u0635\u0641\u0627\u062a.", "id": "Memberi setiap huruf haknya (makhraj dan sifat).", "en": "Giving every letter its right (articulation and traits)."}}, {"front": {"ar": "\u0627\u0642\u0631\u0623 \u0623\u0648\u0644 \u062e\u0645\u0633 \u0622\u064a\u0627\u062a \u0645\u0646 \u0633\u0648\u0631\u0629 \u0627\u0644\u0639\u0644\u0642!", "id": "Baca 5 ayat awal surat Al-'Alaq!", "en": "Recite the first 5 verses of Al-Alaq!"}, "back": {"ar": "\u0627\u0642\u0631\u0623 \u0628\u0627\u0633\u0645 \u0631\u0628\u0643 \u0627\u0644\u0630\u064a \u062e\u0644\u0642...", "id": "Bacalah dengan tartil.", "en": "Recite with proper Tajweed."}}, {"front": {"ar": "\u0645\u0627 \u0647\u064a \u0627\u0644\u062d\u0631\u0648\u0641 \u0627\u0644\u062a\u064a \u062a\u0642\u0644\u0642\u0644\u061f", "id": "Apa saja huruf Qalqalah?", "en": "What are the Qalqalah letters?"}, "back": {"ar": "\u0642\u0637\u0628 \u062c\u062f (\u0642\u060c \u0637\u060c \u0628\u060c \u062c\u060c \u062f).", "id": "Qaf, Tha, Ba, Jim, Dal.", "en": "Qaf, Ta, Ba, Jim, Dal."}}, {"front": {"ar": "\u0645\u0627 \u0647\u0648 \u0627\u0644\u0625\u0639\u0631\u0627\u0628\u061f", "id": "Apa itu I'rab?", "en": "What is I'rab (Inflection)?"}, "back": {"ar": "\u062a\u063a\u064a\u064a\u0631 \u0623\u0648\u0627\u062e\u0631 \u0627\u0644\u0643\u0644\u0645 \u0644\u0627\u062e\u062a\u0644\u0627\u0641 \u0627\u0644\u0639\u0648\u0627\u0645\u0644 \u0627\u0644\u062f\u0627\u062e\u0644\u0629 \u0639\u0644\u064a\u0647\u0627.", "id": "Perubahan akhir kata karena perbedaan amil.", "en": "The change of word endings due to differing governing factors."}}, {"front": {"ar": "\u0627\u0630\u0643\u0631 \u0623\u0642\u0633\u0627\u0645 \u0627\u0644\u0643\u0644\u0645\u0629!", "id": "Sebutkan pembagian kata!", "en": "Mention the parts of speech!"}, "back": {"ar": "\u0627\u0633\u0645\u060c \u0648\u0641\u0639\u0644\u060c \u0648\u062d\u0631\u0641 \u062c\u0627\u0621 \u0644\u0645\u0639\u0646\u0649.", "id": "Isim, Fi'il, dan Huruf.", "en": "Noun, Verb, and Meaningful Particle."}}, {"front": {"ar": "\u0645\u0627 \u0647\u064a \u0639\u0644\u0627\u0645\u0627\u062a \u0627\u0644\u0627\u0633\u0645\u061f", "id": "Apa tanda-tanda Isim?", "en": "What are the signs of a Noun?"}, "back": {"ar": "\u0627\u0644\u062c\u0631\u060c \u0648\u0627\u0644\u062a\u0646\u0648\u064a\u0646\u060c \u0648\u062f\u062e\u0648\u0644 \u0627\u0644\u0623\u0644\u0641 \u0648\u0627\u0644\u0644\u0627\u0645.", "id": "Jar, Tanwin, dan Alif-Lam.", "en": "Genitive case, Tanwin, and Alif-Lam."}}, {"front": {"ar": "\u0645\u0627 \u0647\u0648 \u0627\u0644\u0641\u0639\u0644 \u0627\u0644\u0645\u0627\u0636\u064a\u061f", "id": "Apa itu Fi'il Madhi?", "en": "What is the Past Tense Verb?"}, "back": {"ar": "\u0645\u0627 \u062f\u0644 \u0639\u0644\u0649 \u062d\u062f\u062b \u0648\u0642\u0639 \u0641\u064a \u0627\u0644\u0632\u0645\u0646 \u0627\u0644\u0645\u0627\u0636\u064a.", "id": "Kata kerja menunjukkan masa lampau.", "en": "A verb indicating an action in the past."}}, {"front": {"ar": "\u0635\u063a \u0627\u0633\u0645 \u0627\u0644\u0645\u0641\u0639\u0648\u0644 \u0645\u0646 \u0641\u0639\u0644 '\u0641\u062a\u062d'!", "id": "Isim Maf'ul dari 'Fataha'?", "en": "Passive Participle of 'Fataha'?"}, "back": {"ar": "\u0645\u0641\u062a\u0648\u062d.", "id": "Maftuuhun.", "en": "Maftuuhun."}}, {"front": {"ar": "\u0645\u0627 \u0647\u064a \u0627\u0644\u0633\u0628\u0639 \u0627\u0644\u0645\u062b\u0627\u0646\u064a\u061f", "id": "Apa 'Sab'ul Matsani'?", "en": "What is 'The Seven Oft-Repeated'?"}, "back": {"ar": "\u0633\u0648\u0631\u0629 \u0627\u0644\u0641\u0627\u062a\u062d\u0629.", "id": "Surat Al-Fatihah.", "en": "Surah Al-Fatihah."}}, {"front": {"ar": "\u0643\u0645 \u0639\u062f\u062f \u0623\u062c\u0632\u0627\u0621 \u0627\u0644\u0642\u0631\u0622\u0646\u061f", "id": "Berapa jumlah juz Al-Qur'an?", "en": "How many Juz are in the Quran?"}, "back": {"ar": "\u062b\u0644\u0627\u062b\u0648\u0646 (30) \u062c\u0632\u0621\u0627.", "id": "30 Juz.", "en": "30 Juz."}}, {"front": {"ar": "\u0645\u0627 \u0647\u064a \u0627\u0644\u0633\u0648\u0631\u0629 \u0627\u0644\u062a\u064a \u062a\u062e\u0644\u0648 \u0645\u0646 \u0627\u0644\u0628\u0633\u0645\u0644\u0629\u061f", "id": "Surat tanpa Basmalah?", "en": "Which Surah lacks Basmalah?"}, "back": {"ar": "\u0633\u0648\u0631\u0629 \u0627\u0644\u062a\u0648\u0628\u0629.", "id": "Surat At-Taubah.", "en": "Surah At-Tawbah."}}, {"front": {"ar": "\u0645\u0627 \u0647\u0648 \u0627\u0644\u0625\u0638\u0647\u0627\u0631\u061f", "id": "Apa itu Idzhar?", "en": "What is Idzhar (Clarification)?"}, "back": {"ar": "\u0646\u0637\u0642 \u0627\u0644\u0646\u0648\u0646 \u0627\u0644\u0633\u0627\u0643\u0646\u0629 \u0628\u0648\u0636\u0648\u062d \u0639\u0646\u062f \u062d\u0631\u0648\u0641 \u0627\u0644\u062d\u0644\u0642.", "id": "Membaca Nun sukun jelas di huruf tenggorokan.", "en": "Clearly pronouncing Nun Sakinah at throat letters."}}, {"front": {"ar": "\u0627\u0630\u0643\u0631 \u062d\u0631\u0648\u0641 \u0627\u0644\u062d\u0644\u0642!", "id": "Huruf-huruf tenggorokan?", "en": "Throat letters?"}, "back": {"ar": "\u0627\u0644\u0647\u0645\u0632\u0629\u060c \u0648\u0627\u0644\u0647\u0627\u0621\u060c \u0648\u0627\u0644\u0639\u064a\u0646\u060c \u0648\u0627\u0644\u062d\u0627\u0621\u060c \u0648\u0627\u0644\u0639\u064a\u0646\u060c \u0648\u0627\u0644\u062e\u0627\u0621.", "id": "Hamzah, Ha, 'Ain, Ha, Ghoin, Kho.", "en": "Hamzah, Ha, 'Ain, Ha, Ghayn, Kha."}}, {"front": {"ar": "\u0645\u0627 \u0647\u0648 \u0627\u0644\u0645\u0628\u062a\u062f\u0623\u061f", "id": "Apa itu Mubtada'?", "en": "What is the Subject (Mubtada')?"}, "back": {"ar": "\u0647\u0648 \u0627\u0644\u0627\u0633\u0645 \u0627\u0644\u0645\u0631\u0641\u0648\u0639 \u0627\u0644\u0639\u0627\u0631\u064a \u0639\u0646 \u0627\u0644\u0639\u0648\u0627\u0645\u0644 \u0627\u0644\u0644\u0641\u0638\u064a\u0629.", "id": "Isim marfu' di awal kalimat tanpa amil lafdzi.", "en": "The nominative noun at the start, free from verbal governors."}}, {"front": {"ar": "\u0645\u0627 \u0647\u0648 \u0627\u0644\u062e\u0628\u0631\u061f", "id": "Apa itu Khabar?", "en": "What is the Predicate (Khabar)?"}, "back": {"ar": "\u0647\u0648 \u0627\u0644\u0627\u0633\u0645 \u0627\u0644\u0645\u0631\u0641\u0648\u0639 \u0627\u0644\u0645\u0633\u0646\u062f \u0625\u0644\u0649 \u0627\u0644\u0645\u0628\u062a\u062f\u0623.", "id": "Isim marfu' yang disandarkan pada mubtada'.", "en": "The nominative noun attributed to the subject."}}, {"front": {"ar": "\u0645\u0627 \u0647\u064a '\u0643\u0627\u0646' \u0648\u0623\u062e\u0648\u0627\u062a\u0647\u0627\u061f", "id": "Apa itu 'Kana' wa akhwatuha?", "en": "What is 'Kana' and its sisters?"}, "back": {"ar": "\u0623\u0641\u0639\u0627\u0644 \u062a\u0631\u0641\u0639 \u0627\u0644\u0645\u0628\u062a\u062f\u0623 \u0648\u062a\u0646\u0635\u0628 \u0627\u0644\u062e\u0628\u0631.", "id": "Fi'il yang me-rafa'-kan mubtada' dan men-nashab-kan khabar.", "en": "Verbs that make the subject nominative and the predicate accusative."}}, {"front": {"ar": "\u0645\u0627 \u0647\u064a '\u0625\u0646' \u0648\u0623\u062e\u0648\u0627\u062a\u0647\u0627\uff1f", "id": "Apa itu 'Inna' wa akhwatuha?", "en": "What is 'Inna' and its sisters?"}, "back": {"ar": "\u062d\u0631\u0648\u0641 \u062a\u0646\u0635\u0628 \u0627\u0644\u0645\u0628\u062a\u062f\u0623 \u0648\u062a\u0631\u0641\u0639 \u0627\u0644\u062e\u0628\u0631.", "id": "Huruf yang men-nashab-kan mubtada' dan me-rafa'-kan khabar.", "en": "Particles that make the subject accusative and the predicate nominative."}}], "Set 4: Vision & Knowledge of Saudi Arabia": [{"front": {"ar": "\u0645\u0646 \u0647\u0648 \u0645\u0644\u0643 \u0627\u0644\u0645\u0645\u0644\u0643\u0629 \u0627\u0644\u0639\u0631\u0628\u064a\u0629 \u0627\u0644\u0633\u0639\u0648\u062f\u064a\u0629\u061f", "id": "Siapa Raja Arab Saudi?", "en": "Who is the King of Saudi Arabia?"}, "back": {"ar": "\u0627\u0644\u0645\u0644\u0643 \u0633\u0644\u0645\u0627\u0646 \u0628\u0646 \u0639\u0628\u062f \u0627\u0644\u0639\u0632\u064a\u0632 \u0622\u0644 \u0633\u0639\u0648\u062f.", "id": "Raja Salman bin Abdulaziz Al Saud.", "en": "King Salman bin Abdulaziz Al Saud."}}, {"front": {"ar": "\u0645\u0646 \u0647\u0648 \u0648\u0644\u064a \u0639\u0647\u062f \u0627\u0644\u0645\u0645\u0644\u0643\u0629\u061f", "id": "Siapa Putra Mahkota Saudi?", "en": "Who is the Crown Prince of Saudi?"}, "back": {"ar": "\u0627\u0644\u0623\u0645\u064a\u0631 \u0645\u062d\u0645\u062f \u0628\u0646 \u0633\u0644\u0645\u0627\u0646 \u0622\u0644 \u0633\u0639\u0648\u062f.", "id": "Pangeran Muhammad bin Salman Al Saud.", "en": "Prince Mohammed bin Salman Al Saud."}}, {"front": {"ar": "\u0645\u0627 \u0647\u064a \u0639\u0627\u0635\u0645\u0629 \u0627\u0644\u0645\u0645\u0644\u0643\u0629\u061f", "id": "Ibu kota Saudi?", "en": "What is the capital of Saudi Arabia?"}, "back": {"ar": "\u0645\u062f\u064a\u0646\u0629 \u0627\u0644\u0631\u064a\u0627\u0636.", "id": "Kota Riyadh.", "en": "Riyadh city."}}, {"front": {"ar": "\u0645\u0627 \u0647\u064a \u0631\u0624\u064a\u0629 \u0627\u0644\u0645\u0645\u0644\u0643\u0629 2030\u061f", "id": "Apa Visi Saudi 2030?", "en": "What is Saudi Vision 2030?"}, "back": {"ar": "\u062e\u0637\u0629 \u0627\u0633\u062a\u0631\u0627\u062a\u064a\u062c\u064a\u0629 \u0644\u062a\u0646\u0648\u064a\u0639 \u0627\u0644\u0627\u0642\u062a\u0635\u0627\u062f \u0648\u062a\u0637\u0648\u064a\u0631 \u0627\u0644\u0645\u062c\u062a\u0645\u0639.", "id": "Rencana strategis ekonomi dan sosial Saudi.", "en": "A strategic plan to diversify the economy and develop society."}}, {"front": {"ar": "\u0627\u0630\u0643\u0631 \u0627\u0633\u0645\u064a\u0646 \u0645\u0646 \u0643\u0628\u0627\u0631 \u0627\u0644\u0639\u0644\u0645\u0627\u0621 \u0641\u064a \u0627\u0644\u0633\u0639\u0648\u062f\u064a\u0629!", "id": "Sebutkan 2 ulama besar Saudi!", "en": "Mention 2 great Saudi scholars!"}, "back": {"ar": "\u0627\u0644\u0634\u064a\u062e \u0627\u0628\u0646 \u0628\u0627\u0632 \u0648\u0627\u0644\u0634\u064a\u062e \u0627\u0628\u0646 \u0639\u062b\u064a\u0645\u064a\u0646 \u0631\u062d\u0645\u0647\u0645\u0627 \u0627\u0644\u0644\u0647.", "id": "Syaikh Bin Baz dan Syaikh Bin Utsaimin.", "en": "Sheikh Bin Baz and Sheikh Ibn Uthaymeen."}}, {"front": {"ar": "\u0645\u0627 \u0647\u0648 \u0641\u0636\u0644 \u0645\u062f\u064a\u0646\u0629 \u0631\u0633\u0648\u0644 \u0627\u0644\u0644\u0647 \ufdfa\u061f", "id": "Keutamaan kota Rasulullah?", "en": "Virtue of the Prophet's city?"}, "back": {"ar": "\u0641\u064a\u0647\u0627 \u0627\u0644\u0645\u0633\u062c\u062f \u0627\u0644\u0646\u0628\u0648\u064a \u0648\u0627\u0644\u0635\u0644\u0627\u0629 \u0641\u064a\u0647 \u0628\u0623\u0644\u0641 \u0635\u0644\u0627\u0629.", "id": "Ada Masjid Nabawi, shalat di sana pahalanya 1000x.", "en": "It has the Prophet's Mosque; one prayer is worth 1000 prayers."}}, {"front": {"ar": "\u0645\u0627\u0630\u0627 \u062a\u0639\u0631\u0641 \u0639\u0646 \u0647\u064a\u0626\u0629 \u0643\u0628\u0627\u0631 \u0627\u0644\u0639\u0644\u0645\u0627\u0621\u061f", "id": "Apa itu Hai'ah Kibarul Ulama?", "en": "What do you know about the Council of Senior Scholars?"}, "back": {"ar": "\u0647\u064a \u0623\u0639\u0644\u0649 \u0647\u064a\u0626\u0629 \u062f\u064a\u0646\u064a\u0629 \u0641\u064a \u0627\u0644\u0645\u0645\u0644\u0643\u0629 \u062a\u0642\u062f\u0645 \u0627\u0644\u0641\u062a\u0627\u0648\u0649 \u0648\u0627\u0644\u0634\u0648\u0631\u0649.", "id": "Lembaga agama tertinggi Saudi untuk fatwa.", "en": "The highest religious body in Saudi providing fatwas and counsel."}}, {"front": {"ar": "\u0645\u0646 \u0647\u0648 \u0645\u0641\u062a\u064a \u0639\u0627\u0645 \u0627\u0644\u0645\u0645\u0644\u0643\u0629 \u0627\u0644\u062d\u0627\u0644\u064a\u061f", "id": "Siapa Mufti Besar Saudi sekarang?", "en": "Who is the current Grand Mufti of Saudi?"}, "back": {"ar": "\u0627\u0644\u0634\u064a\u062e \u0639\u0628\u062f \u0627\u0644\u0639\u0632\u064a\u0632 \u0628\u0646 \u0639\u0628\u062f \u0627\u0644\u0644\u0647 \u0622\u0644 \u0627\u0644\u0634\u064a\u062e.", "id": "Syaikh Abdul Aziz bin Abdullah Al-Syaikh.", "en": "Sheikh Abdul Aziz bin Abdullah Al-Sheikh."}}, {"front": {"ar": "\u0644\u0645\u0627\u0630\u0627 \u0627\u062e\u062a\u0631\u062a \u062a\u062e\u0635\u0635 \u0627\u0644\u0634\u0631\u064a\u0639\u0629\u061f", "id": "Kenapa pilih jurusan Syariah?", "en": "Why did you choose Sharia major?"}, "back": {"ar": "\u0644\u0623\u062a\u0639\u0644\u0645 \u0623\u062d\u0643\u0627\u0645 \u0627\u0644\u062f\u064a\u0646 \u0648\u0623\u0637\u0628\u0642\u0647\u0627 \u0648\u0623\u0639\u0644\u0645\u0647\u0627 \u0644\u0644\u0646\u0627\u0633.", "id": "Belajar hukum agama untuk diamalkan dan diajarkan.", "en": "To learn religious laws, apply them, and teach them."}}, {"front": {"ar": "\u0643\u064a\u0641 \u0633\u062a\u062e\u062f\u0645 \u0628\u0644\u062f\u0643 \u0628\u0639\u062f \u0627\u0644\u062a\u062e\u0631\u062c\u061f", "id": "Cara khidmah untuk negara setelah lulus?", "en": "How will you serve your country after graduation?"}, "back": {"ar": "\u0633\u0623\u0643\u0648\u0646 \u062f\u0627\u0639\u064a\u0627 \u0625\u0644\u0649 \u0627\u0644\u0644\u0647 \u0628\u0627\u0644\u062d\u0643\u0645\u0629 \u0648\u0627\u0644\u0645\u0648\u0639\u0638\u0629 \u0627\u0644\u062d\u0633\u0646\u0629.", "id": "Menjadi dai dengan hikmah dan nasihat baik.", "en": "I will be a caller to Allah with wisdom and good preaching."}}, {"front": {"ar": "\u0645\u0627 \u0631\u0623\u064a\u0643 \u0641\u064a \u0627\u0644\u062a\u0639\u0627\u0648\u0646 \u0628\u064a\u0646 \u0627\u0644\u0633\u0639\u0648\u062f\u064a\u0629 \u0648\u0625\u0646\u062f\u0648\u0646\u064a\u0633\u064a\u0627\u061f", "id": "Pendapatmu tentang kerjasama Saudi-Indo?", "en": "Your opinion on Saudi-Indo cooperation?"}, "back": {"ar": "\u062a\u0639\u0627\u0648\u0646 \u0642\u0648\u064a \u0648\u0645\u0641\u064a\u062f \u0641\u064a \u062e\u062f\u0645\u0629 \u0627\u0644\u0625\u0633\u0644\u0627\u0645 \u0648\u0627\u0644\u0645\u0633\u0644\u0645\u064a\u0646.", "id": "Kerjasama kuat dan bermanfaat bagi umat Islam.", "en": "Strong and beneficial cooperation in serving Islam and Muslims."}}, {"front": {"ar": "\u0645\u0627 \u0647\u0648 \u064a\u0648\u0645 \u0627\u0644\u062a\u0623\u0633\u064a\u0633 \u0641\u064a \u0627\u0644\u0645\u0645\u0644\u0643\u0629\u061f", "id": "Apa Hari Pendirian Saudi?", "en": "What is Saudi Foundation Day?"}, "back": {"ar": "\u064a\u0648\u0645 \u064a\u0648\u0627\u0641\u0642 22 \u0641\u0628\u0631\u0627\u064a\u0631\u060c \u064a\u062e\u0644\u062f \u0630\u0643\u0631\u0649 \u062a\u0623\u0633\u064a\u0633 \u0627\u0644\u062f\u0648\u0644\u0629 \u0627\u0644\u0623\u0648\u0644\u0649.", "id": "22 Februari, mengenang berdirinya negara Saudi pertama.", "en": "February 22nd, commemorating the founding of the first Saudi state."}}, {"front": {"ar": "\u0627\u0630\u0643\u0631 \u0627\u0633\u0645 \u0627\u0644\u0645\u0633\u062c\u062f \u0627\u0644\u062d\u0631\u0627\u0645 \u0648\u0627\u0644\u0645\u0633\u062c\u062f \u0627\u0644\u0646\u0628\u0648\u064a!", "id": "Sebutkan nama Masjidil Haram & Nabawi!", "en": "State the names: Al-Haram & An-Nabawi Mosque!"}, "back": {"ar": "\u0627\u0644\u0645\u0633\u062c\u062f \u0627\u0644\u062d\u0631\u0627\u0645 \u0641\u064a \u0645\u0643\u0629\u060c \u0648\u0627\u0644\u0645\u0633\u062c\u062f \u0627\u0644\u0646\u0628\u0648\u064a \u0641\u064a \u0627\u0644\u0645\u062f\u064a\u0646\u0629.", "id": "Haram di Makkah, Nabawi di Madinah.", "en": "Al-Haram in Makkah, An-Nabawi in Madinah."}}, {"front": {"ar": "\u0645\u0627 \u0647\u0648 \u0627\u0644\u0639\u0645\u0644 \u0627\u0644\u0630\u064a \u062a\u0631\u064a\u062f \u0627\u0644\u0642\u064a\u0627\u0645 \u0628\u0647 \u0641\u064a \u0627\u0644\u0645\u062f\u064a\u0646\u0629 \u063a\u064a\u0631 \u0627\u0644\u062f\u0631\u0627\u0633\u0629\u061f", "id": "Kegiatan di Madinah selain belajar?", "en": "Activities in Madinah besides studying?"}, "back": {"ar": "\u0627\u0644\u0639\u0628\u0627\u062f\u0629\u060c \u0648\u062d\u0641\u0638 \u0627\u0644\u0642\u0631\u0622\u0646\u060c \u0648\u062d\u0636\u0648\u0631 \u0645\u062c\u0627\u0644\u0633 \u0627\u0644\u0639\u0644\u0645\u0627\u0621.", "id": "Ibadah, hafal Quran, dan hadir majelis ulama.", "en": "Worship, memorizing Quran, and attending scholars' circles."}}, {"front": {"ar": "\u0647\u0644 \u062a\u0642\u0631\u0623 \u0644\u0639\u0644\u0645\u0627\u0621 \u0627\u0644\u0633\u0639\u0648\u062f\u064a\u0629 \u0627\u0644\u0645\u0639\u0627\u0635\u0631\u064a\u0646\u061f", "id": "Baca karya ulama Saudi kontemporer?", "en": "Do you read contemporary Saudi scholars?"}, "back": {"ar": "\u0646\u0639\u0645\u060c \u0645\u062b\u0644 \u0643\u062a\u0628 \u0627\u0644\u0634\u064a\u062e \u0627\u0644\u0641\u0648\u0632\u0627\u0646 \u0648\u0627\u0644\u0634\u064a\u062e \u0639\u0628\u062f \u0627\u0644\u0631\u0632\u0627\u0642 \u0627\u0644\u0628\u062f\u0631.", "id": "Ya, seperti Syaikh Fauzan dan Syaikh Abdurrazzaq al-Badr.", "en": "Yes, like books by Sheikh Fawzan and Sheikh Abdul Razzaq al-Badr."}}, {"front": {"ar": "\u0645\u0627\u0630\u0627 \u062a\u0639\u0631\u0641 \u0639\u0646 \u062c\u0628\u0644 \u0623\u062d\u062f\u061f", "id": "Apa yang kamu tahu tentang Gunung Uhud?", "en": "What do you know about Mount Uhud?"}, "back": {"ar": "\u062c\u0628\u0644 \u064a\u062d\u0628\u0646\u0627 \u0648\u0646\u062d\u0628\u0647\u060c \u0648\u0642\u0639\u062a \u0639\u0646\u062f\u0647 \u063a\u0632\u0648\u0629 \u0623\u062d\u062f \u0627\u0644\u0645\u0634\u0647\u0648\u0631\u0629.", "id": "Gunung yang mencintai kita dan kita cintai, lokasi perang Uhud.", "en": "A mountain that loves us and we love; site of the famous Battle of Uhud."}}, {"front": {"ar": "\u0645\u0627 \u0647\u0648 \u0645\u062c\u0645\u0639 \u0627\u0644\u0645\u0644\u0643 \u0641\u0647\u062f\u061f", "id": "Apa Kompleks Raja Fahd?", "en": "What is the King Fahd Complex?"}, "back": {"ar": "\u0647\u0648 \u0645\u062c\u0645\u0639 \u0644\u0637\u0628\u0627\u0639\u0629 \u0627\u0644\u0645\u0635\u062d\u0641 \u0627\u0644\u0634\u0631\u064a\u0641 \u0641\u064a \u0627\u0644\u0645\u062f\u064a\u0646\u0629 \u0627\u0644\u0645\u0646\u0648\u0631\u0629.", "id": "Kompleks pencetakan Al-Qur'an di Madinah.", "en": "A complex for printing the Holy Quran in Madinah."}}, {"front": {"ar": "\u0647\u0644 \u0623\u0646\u062a \u0645\u0633\u062a\u0639\u062f \u0644\u0644\u0628\u0639\u062f \u0639\u0646 \u0623\u0647\u0644\u0643 \u0644\u0633\u0646\u0648\u0627\u062a\u061f", "id": "Siap jauh dari keluarga bertahun-tahun?", "en": "Ready to be away from family for years?"}, "back": {"ar": "\u0646\u0639\u0645\u060c \u0641\u064a \u0633\u0628\u064a\u0644 \u0637\u0644\u0628 \u0627\u0644\u0639\u0644\u0645 \u0648\u0627\u0628\u062a\u063a\u0627\u0621 \u0645\u0631\u0636\u0627\u0629 \u0627\u0644\u0644\u0647.", "id": "Ya, demi ilmu dan mencari ridha Allah.", "en": "Yes, for the sake of knowledge and seeking Allah's pleasure."}}, {"front": {"ar": "\u0645\u0627\u0630\u0627 \u0633\u062a\u0641\u0639\u0644 \u0625\u0630\u0627 \u0631\u0623\u064a\u062a \u0645\u0646\u0643\u0631\u0627 \u0641\u064a \u0627\u0644\u062c\u0627\u0645\u0639\u0629\u061f", "id": "Jika melihat kemungkaran di kampus?", "en": "If you see a vice in the university?"}, "back": {"ar": "\u0633\u0623\u0646\u0635\u062d \u0628\u0627\u0644\u062d\u0643\u0645\u0629 \u0648\u0627\u0644\u0631\u0641\u0642 \u0648\u0627\u0644\u0644\u064a\u0646 \u062d\u0633\u0628 \u0627\u0644\u0623\u0646\u0638\u0645\u0629.", "id": "Nasihati dengan hikmah dan lembut sesuai aturan.", "en": "I will advise with wisdom and kindness according to rules."}}, {"front": {"ar": "\u0645\u0646 \u0647\u0645 '\u0623\u0647\u0644 \u0627\u0644\u0633\u0646\u0629 \u0648\u0627\u0644\u062c\u0645\u0627\u0639\u0629'\u061f", "id": "Siapa Ahlus Sunnah wal Jama'ah?", "en": "Who are Ahlus Sunnah wal-Jama'ah?"}, "back": {"ar": "\u0647\u0645 \u0645\u0646 \u0643\u0627\u0646 \u0639\u0644\u0649 \u0645\u062b\u0644 \u0645\u0627 \u0643\u0627\u0646 \u0639\u0644\u064a\u0647 \u0627\u0644\u0646\u0628\u064a \ufdfa \u0648\u0623\u0635\u062d\u0627\u0628\u0647.", "id": "Mereka yang mengikuti jalan Nabi dan para Sahabat.", "en": "Those who follow the path of the Prophet and his Companions."}}, {"front": {"ar": "\u0645\u0627 \u0647\u0648 \u0645\u0630\u0647\u0628 \u0627\u0644\u062f\u0648\u0644\u0629 \u0627\u0644\u0633\u0639\u0648\u062f\u064a\u0629 \u0641\u064a \u0627\u0644\u0641\u0642\u0647\u061f", "id": "Madzhab fiqih negara Saudi?", "en": "Saudi state's Fiqh school?"}, "back": {"ar": "\u0627\u0644\u0645\u0630\u0647\u0628 \u0627\u0644\u062d\u0646\u0628\u0644\u064a \u0645\u0639 \u0627\u0644\u062f\u0644\u064a\u0644 \u0645\u0646 \u0627\u0644\u0643\u062a\u0627\u0628 \u0648\u0627\u0644\u0633\u0646\u0629.", "id": "Madzhab Hambali dengan dalil Quran dan Sunnah.", "en": "The Hanbali school based on Quran and Sunnah evidence."}}, {"front": {"ar": "\u0645\u0627 \u0647\u064a \u0623\u0647\u0645\u064a\u0629 \u0627\u0644\u062a\u0648\u062d\u064a\u062f \u0641\u064a \u0646\u0638\u0631\u0643\u061f", "id": "Pentingnya Tauhid menurutmu?", "en": "Importance of Tawheed in your view?"}, "back": {"ar": "\u0647\u0648 \u0623\u0633\u0627\u0633 \u0627\u0644\u062f\u064a\u0646 \u0648\u0633\u0628\u0628 \u062f\u062e\u0648\u0644 \u0627\u0644\u062c\u0646\u0629 \u0648\u0627\u0644\u0646\u062c\u0627\u0629 \u0645\u0646 \u0627\u0644\u0646\u0627\u0631.", "id": "Pondasi agama, sebab masuk surga dan selamat dari neraka.", "en": "It's the basis of religion and reason for entering Paradise."}}, {"front": {"ar": "\u0645\u0646 \u0647\u0648 \u0623\u0633\u062a\u0627\u0630\u0643 \u0627\u0644\u0645\u0641\u0636\u0644 \u0641\u064a \u0628\u0644\u062f\u0643\u061f", "id": "Ustadz favoritmu di Indonesia?", "en": "Your favorite teacher in your country?"}, "back": {"ar": "\u0623\u0633\u062a\u0627\u0630\u064a \u0647\u0648 \u0627\u0644\u0623\u0633\u062a\u0627\u0630... \u0627\u0644\u0630\u064a \u0639\u0644\u0645\u0646\u064a \u0627\u0644\u0639\u0642\u064a\u062f\u0629.", "id": "Ustadz saya adalah... yang mengajar Akidah.", "en": "My teacher is Ustadh... who taught me Aqeedah."}}, {"front": {"ar": "\u0645\u0627\u0630\u0627 \u062a\u0639\u0631\u0641 \u0639\u0646 \u062c\u0627\u0645\u0639\u0629 \u0637\u064a\u0628\u0629\u061f", "id": "Apa itu Universitas Taibah?", "en": "What do you know about Taibah University?"}, "back": {"ar": "\u0647\u064a \u062c\u0627\u0645\u0639\u0629 \u062d\u0643\u0648\u0645\u064a\u0629 \u0623\u062e\u0631\u0649 \u0641\u064a \u0627\u0644\u0645\u062f\u064a\u0646\u0629 \u0627\u0644\u0645\u0646\u0648\u0631\u0629.", "id": "Kampus negeri lain di Madinah.", "en": "Another public university in Madinah."}}, {"front": {"ar": "\u0647\u0644 \u062a\u062a\u0627\u0628\u0639 \u062f\u0631\u0648\u0633 \u0639\u0644\u0645\u0627\u0621 \u0627\u0644\u0645\u0633\u062c\u062f \u0627\u0644\u0646\u0628\u0648\u064a\u061f", "id": "Ikuti kajian ulama Masjid Nabawi?", "en": "Do you follow lessons of Nabawi Mosque scholars?"}, "back": {"ar": "\u0646\u0639\u0645\u060c \u0623\u062a\u0627\u0628\u0639\u0647\u0627 \u0639\u0628\u0631 \u0627\u0644\u0625\u0646\u062a\u0631\u0646\u062a \u0648\u0627\u0644\u0628\u062b \u0627\u0644\u0645\u0628\u0627\u0634\u0631.", "id": "Ya, via internet dan siaran langsung.", "en": "Yes, I follow them via internet and live broadcasts."}}], "Set 5: Indonesia & Contemporary Global Issues": [{"front": {"ar": "\u0645\u0627 \u0647\u064a \u0623\u0643\u0628\u0631 \u0645\u0646\u0638\u0645\u0629 \u0625\u0633\u0644\u0627\u0645\u064a\u0629 \u0641\u064a \u0625\u0646\u062f\u0648\u0646\u064a\u0633\u064a\u0627\u061f", "id": "Organisasi Islam terbesar di Indonesia?", "en": "Largest Islamic organization in Indonesia?"}, "back": {"ar": "\u062c\u0645\u0639\u064a\u0629 \u0646\u0647\u0636\u0629 \u0627\u0644\u0639\u0644\u0645\u0627\u0621 \u0648\u062c\u0645\u0639\u064a\u0629 \u0627\u0644\u0645\u062d\u0645\u062f\u064a\u0629.", "id": "Nahdlatul Ulama (NU) dan Muhammadiyah.", "en": "Nahdlatul Ulama (NU) and Muhammadiyah."}}, {"front": {"ar": "\u0645\u0627 \u0647\u064a \u0627\u0644\u0623\u0643\u0644\u0629 \u0627\u0644\u0645\u0634\u0647\u0648\u0631\u0629 \u0641\u064a \u0625\u0646\u062f\u0648\u0646\u064a\u0633\u064a\u0627\u061f", "id": "Makanan terkenal di Indonesia?", "en": "Famous food in Indonesia?"}, "back": {"ar": "\u0627\u0644\u0623\u0631\u0632 \u0627\u0644\u0645\u0642\u0644\u064a (\u0646\u0627\u0633\u064a \u062c\u0648\u0631\u064a\u0646\u062c) \u0648\u0627\u0644\u0644\u062d\u0645 \u0627\u0644\u0645\u0634\u0648\u064a (\u0633\u0627\u062a\u064a).", "id": "Nasi goreng dan sate.", "en": "Fried rice (Nasi Goreng) and Satay."}}, {"front": {"ar": "\u0643\u0645 \u0639\u062f\u062f \u0633\u0643\u0627\u0646 \u0625\u0646\u062f\u0648\u0646\u064a\u0633\u064a\u0627 \u062a\u0642\u0631\u064a\u0628\u0627\u061f", "id": "Jumlah penduduk Indonesia?", "en": "Population of Indonesia?"}, "back": {"ar": "\u062d\u0648\u0627\u0644\u064a \u0645\u0627\u0626\u062a\u064a\u0646 \u0648\u0633\u0628\u0639\u064a\u0646 \u0645\u0644\u064a\u0648\u0646 \u0646\u0633\u0645\u0629 (270).", "id": "Sekitar 270 juta jiwa.", "en": "About 270 million people."}}, {"front": {"ar": "\u0645\u0627 \u0647\u064a \u0627\u0644\u0645\u0634\u0627\u0643\u0644 \u0627\u0644\u0639\u0642\u062f\u064a\u0629 \u0641\u064a \u0628\u0644\u062f\u0643\u061f", "id": "Masalah akidah di negaramu?", "en": "Aqeedah issues in your country?"}, "back": {"ar": "\u0648\u062c\u0648\u062f \u0628\u0639\u0636 \u0627\u0644\u0628\u062f\u0639 \u0648\u0627\u0644\u0642\u0628\u0648\u0631\u064a\u0627\u062a \u0648\u0627\u0644\u0641\u0631\u0642 \u0627\u0644\u0645\u0646\u062d\u0631\u0641\u0629.", "id": "Adanya bid'ah, kuburiyun, dan aliran menyimpang.", "en": "Existence of innovations, shrine-worship, and deviant sects."}}, {"front": {"ar": "\u0643\u064a\u0641 \u062a\u062a\u0639\u0627\u0645\u0644 \u0645\u0639 \u0645\u0646 \u064a\u062e\u0627\u0644\u0641\u0643 \u0641\u064a \u0627\u0644\u0639\u0642\u064a\u062f\u0629 \u0628\u0627\u0644\u0631\u0641\u0642\u061f", "id": "Sikap lembut pada yang beda akidah?", "en": "Dealing kindly with those who differ in Aqeedah?"}, "back": {"ar": "\u0623\u062f\u0639\u0648\u0647 \u0628\u0627\u0644\u062d\u0643\u0645\u0629 \u0648\u0627\u0644\u0645\u0648\u0639\u0638\u0629 \u0627\u0644\u062d\u0633\u0646\u0629 \u0648\u0627\u0644\u062c\u062f\u0627\u0644 \u0628\u0627\u0644\u062a\u064a \u0647\u064a \u0623\u062d\u0633\u0646.", "id": "Berdakwah dengan hikmah dan nasihat baik.", "en": "Calling them with wisdom, good preaching, and fair debate."}}, {"front": {"ar": "\u0645\u0627 \u0647\u0648 \u062f\u0648\u0631 \u0627\u0644\u0634\u0628\u0627\u0628 \u0641\u064a \u0646\u0647\u0636\u0629 \u0627\u0644\u0623\u0645\u0629\u061f", "id": "Peran pemuda bagi kejayaan umat?", "en": "Youth's role in the Ummah's revival?"}, "back": {"ar": "\u0627\u0644\u062a\u0645\u0633\u0643 \u0628\u0627\u0644\u062f\u064a\u0646 \u0648\u0637\u0644\u0628 \u0627\u0644\u0639\u0644\u0645 \u0648\u0627\u0644\u0639\u0645\u0644 \u0627\u0644\u0635\u0627\u0644\u062d.", "id": "Pegang teguh agama, cari ilmu, dan amal shalih.", "en": "Adhering to religion, seeking knowledge, and good deeds."}}, {"front": {"ar": "\u0645\u0627\u0630\u0627 \u062a\u0639\u0631\u0641 \u0639\u0646 \u0627\u0644\u062d\u0631\u0643\u0627\u062a \u0627\u0644\u0645\u062a\u0637\u0631\u0641\u0629\u061f", "id": "Apa itu gerakan ekstremis?", "en": "What do you know about extremist movements?"}, "back": {"ar": "\u0647\u064a \u062d\u0631\u0643\u0627\u062a \u062a\u062e\u0627\u0644\u0641 \u0645\u0646\u0647\u062c \u0623\u0647\u0644 \u0627\u0644\u0633\u0646\u0629 \u0648\u062a\u0643\u0641\u0631 \u0627\u0644\u0645\u0633\u0644\u0645\u064a\u0646.", "id": "Gerakan yang menyelisihi Sunnah dan mengkafirkan muslim.", "en": "Movements that oppose the Sunnah and declare Muslims infidels."}}, {"front": {"ar": "\u0647\u0644 \u0625\u0646\u062f\u0648\u0646\u064a\u0633\u064a\u0627 \u062f\u0648\u0644\u0629 \u0625\u0633\u0644\u0627\u0645\u064a\u0629\u061f", "id": "Apakah Indo negara Islam?", "en": "Is Indonesia an Islamic state?"}, "back": {"ar": "\u0625\u0646\u062f\u0648\u0646\u064a\u0633\u064a\u0627 \u062f\u0648\u0644\u0629 \u0630\u0627\u062a \u0623\u063a\u0644\u0628\u064a\u0629 \u0645\u0633\u0644\u0645\u0629 \u0648\u0644\u064a\u0633\u062a \u0639\u0644\u0645\u0627\u0646\u064a\u0629.", "id": "Negara mayoritas muslim, bukan negara sekuler.", "en": "A Muslim-majority country, not a secular one."}}, {"front": {"ar": "\u0645\u0627 \u0647\u064a \u0634\u0639\u0627\u0631 \u062f\u0648\u0644\u0629 \u0625\u0646\u062f\u0648\u0646\u064a\u0633\u064a\u0627\u061f", "id": "Semboyan negara Indonesia?", "en": "What is Indonesia's national motto?"}, "back": {"ar": "\u0628\u064a\u0646\u064a\u0643\u0627 \u062a\u0648\u0646\u063a\u0627\u0644 \u0625\u064a\u0643\u0627 (\u0648\u062d\u062f\u0629 \u0641\u064a \u062a\u0646\u0648\u0639).", "id": "Bhinneka Tunggal Ika.", "en": "Unity in Diversity."}}, {"front": {"ar": "\u0645\u0627 \u0647\u064a \u0627\u0644\u0645\u0630\u0627\u0647\u0628 \u0627\u0644\u0641\u0642\u0647\u064a\u0629 \u0641\u064a \u0625\u0646\u062f\u0648\u0646\u064a\u0633\u064a\u0627\u061f", "id": "Madzhab fiqih di Indonesia?", "en": "Fiqh schools in Indonesia?"}, "back": {"ar": "\u0627\u0644\u0645\u0630\u0647\u0628 \u0627\u0644\u0634\u0627\u0641\u0639\u064a \u0647\u0648 \u0627\u0644\u0633\u0627\u0626\u062f \u0648\u0627\u0644\u0645\u0646\u062a\u0634\u0631.", "id": "Madzhab Syafi'i adalah yang dominan.", "en": "The Shafi'i school is the most prevalent."}}, {"front": {"ar": "\u0643\u064a\u0641 \u062a\u0631\u0649 \u0645\u0633\u062a\u0642\u0628\u0644 \u0627\u0644\u062f\u0639\u0648\u0629 \u0641\u064a \u0628\u0644\u062f\u0643\u061f", "id": "Masa depan dakwah di negerimu?", "en": "Future of Dawah in your country?"}, "back": {"ar": "\u0645\u0633\u062a\u0642\u0628\u0644 \u0648\u0627\u0639\u062f \u0645\u0639 \u0627\u0646\u062a\u0634\u0627\u0631 \u0627\u0644\u0648\u0639\u064a \u0648\u0627\u0644\u0639\u0648\u062f\u0629 \u0644\u0644\u0633\u0646\u0629.", "id": "Masa depan cerah seiring kesadaran kembali ke Sunnah.", "en": "A promising future with increasing awareness and return to Sunnah."}}, {"front": {"ar": "\u0645\u0627 \u0647\u064a \u0623\u0641\u0636\u0644 \u0648\u0633\u064a\u0644\u0629 \u0644\u0644\u062f\u0639\u0648\u0629 \u0627\u0644\u0622\u0646\u061f", "id": "Sarana dakwah terbaik saat ini?", "en": "Best Dawah tool today?"}, "back": {"ar": "\u0627\u0633\u062a\u062e\u062f\u0627\u0645 \u0648\u0633\u0627\u0626\u0644 \u0627\u0644\u062a\u0648\u0627\u0635\u0644 \u0627\u0644\u0627\u062c\u062a\u0645\u0627\u0639\u064a \u0628\u062d\u0643\u0645\u0629.", "id": "Menggunakan media sosial dengan bijak.", "en": "Using social media wisely."}}, {"front": {"ar": "\u0647\u0644 \u062a\u0634\u062c\u0639 \u0632\u0645\u0644\u0627\u0626\u0643 \u0639\u0644\u0649 \u0627\u0644\u062f\u0631\u0627\u0633\u0629 \u0647\u0646\u0627\u061f", "id": "Dukung teman belajar di sini?", "en": "Encourage peers to study here?"}, "back": {"ar": "\u0646\u0639\u0645\u060c \u0641\u0647\u064a \u0641\u0631\u0635\u0629 \u0639\u0638\u064a\u0645\u0629 \u0644\u0637\u0644\u0628 \u0627\u0644\u0639\u0644\u0645 \u0627\u0644\u0634\u0631\u0639\u064a.", "id": "Ya, ini kesempatan besar belajar ilmu syar'i.", "en": "Yes, it is a great opportunity to seek Sharia knowledge."}}, {"front": {"ar": "\u0645\u0627 \u0647\u0648 \u0645\u0648\u0642\u0641\u0643 \u0645\u0646 \u0627\u0644\u0627\u062d\u062a\u0641\u0627\u0644\u0627\u062a \u0627\u0644\u0628\u062f\u0639\u064a\u0629\u061f", "id": "Sikapmu pada perayaan bid'ah?", "en": "Stance on innovative celebrations?"}, "back": {"ar": "\u062a\u062c\u0646\u0628\u0647\u0627 \u0648\u062a\u0628\u064a\u064a\u0646 \u0627\u0644\u062d\u0642 \u0644\u0644\u0646\u0627\u0633 \u0628\u0627\u0644\u0631\u0641\u0642 \u0648\u0627\u0644\u062d\u0643\u0645\u0629.", "id": "Menghindarinya dan menjelaskan kebenaran dengan lembut.", "en": "Avoiding them and explaining the truth with kindness."}}, {"front": {"ar": "\u0645\u0627\u0630\u0627 \u062a\u0639\u0631\u0641 \u0639\u0646 \u0627\u0644\u0631\u0648\u0647\u064a\u0646\u062c\u0627\u061f", "id": "Apa itu Rohingya?", "en": "What do you know about Rohingya?"}, "back": {"ar": "\u0647\u0645 \u0625\u062e\u0648\u0629 \u0645\u0633\u0644\u0645\u0648\u0646 \u0645\u0636\u0637\u0647\u062f\u0648\u0646 \u064a\u062d\u062a\u0627\u062c\u0648\u0646 \u0644\u062f\u0639\u0627\u0626\u0646\u0627 \u0648\u062f\u0639\u0645\u0646\u0627.", "id": "Saudara muslim terzalimi yang butuh doa dan dukungan.", "en": "Persecuted Muslim brothers who need our prayers and support."}}, {"front": {"ar": "\u0645\u0627 \u0647\u0648 \u0648\u0627\u062c\u0628\u0646\u0627 \u062a\u062c\u0627\u0647 \u0641\u0644\u0633\u0637\u064a\u0646\u061f", "id": "Kewajiban kita pada Palestina?", "en": "Our duty towards Palestine?"}, "back": {"ar": "\u0627\u0644\u062f\u0639\u0627\u0621 \u0644\u0647\u0645 \u0648\u0646\u0635\u0631\u062a\u0647\u0645 \u0628\u0627\u0644\u0648\u0633\u0627\u0626\u0644 \u0627\u0644\u0645\u0645\u0643\u0646\u0629 \u0634\u0631\u0639\u0627.", "id": "Mendoakan dan menolong dengan cara yang dibenarkan syariat.", "en": "Praying for them and supporting them through legitimate means."}}, {"front": {"ar": "\u0645\u0627 \u0647\u064a \u0623\u0647\u0645\u064a\u0629 \u0627\u0644\u0644\u063a\u0629 \u0627\u0644\u0639\u0631\u0628\u064a\u0629 \u0644\u0644\u0623\u0645\u0629\u061f", "id": "Pentingnya Bahasa Arab bagi umat?", "en": "Importance of Arabic for the Ummah?"}, "back": {"ar": "\u0647\u064a \u0644\u063a\u0629 \u0627\u0644\u0642\u0631\u0622\u0646 \u0648\u0641\u0647\u0645 \u0627\u0644\u062f\u064a\u0646 \u0644\u0627 \u064a\u062a\u0645 \u0625\u0644\u0627 \u0628\u0647\u0627.", "id": "Bahasa Al-Qur'an, kunci memahami agama.", "en": "The language of the Quran; religion is understood only through it."}}, {"front": {"ar": "\u0643\u064a\u0641 \u062a\u062d\u0627\u0641\u0638 \u0639\u0644\u0649 \u0648\u0642\u062a\u0643 \u0641\u064a \u0627\u0644\u062c\u0627\u0645\u0639\u0629\uff1f", "id": "Cara menjaga waktu di kampus?", "en": "How to manage time in university?"}, "back": {"ar": "\u0628\u0648\u0636\u0639 \u062c\u062f\u0648\u0644 \u064a\u0648\u0645\u064a \u0648\u0627\u0644\u062a\u0631\u0643\u064a\u0632 \u0639\u0644\u0649 \u0627\u0644\u062f\u0631\u0627\u0633\u0629 \u0648\u0627\u0644\u0639\u0628\u0627\u062f\u0629.", "id": "Membuat jadwal harian, fokus belajar dan ibadah.", "en": "Creating a daily schedule, focusing on study and worship."}}, {"front": {"ar": "\u0645\u0627 \u0647\u0648 \u062a\u0639\u0631\u064a\u0641 '\u0627\u0644\u063a\u0644\u0648' \u0641\u064a \u0627\u0644\u062f\u064a\u0646\u061f", "id": "Apa itu Ghuluw (ekstrim)?", "en": "What is Extremism (Ghuluw) in religion?"}, "back": {"ar": "\u0647\u0648 \u062a\u062c\u0627\u0648\u0632 \u0627\u0644\u062d\u062f \u0641\u064a \u0627\u0644\u0627\u0639\u062a\u0642\u0627\u062f \u0623\u0648 \u0627\u0644\u0639\u0645\u0644.", "id": "Melampaui batas dalam keyakinan atau amal.", "en": "Exceeding the limit in belief or action."}}, {"front": {"ar": "\u0645\u0627 \u0647\u0648 \u0627\u0644\u0625\u0633\u0644\u0627\u0645 \u0627\u0644\u0633\u064a\u0627\u0633\u064a \u0641\u064a \u0646\u0638\u0631\u0643\u061f", "id": "Islam politik menurutmu?", "en": "Political Islam in your view?"}, "back": {"ar": "\u0627\u0644\u0625\u0633\u0644\u0627\u0645 \u062f\u064a\u0646 \u0648\u062f\u0648\u0644\u0629\u060c \u0648\u0644\u0643\u0646 \u064a\u062c\u0628 \u0627\u0644\u062d\u0630\u0631 \u0645\u0646 \u0627\u0644\u062d\u0632\u0628\u064a\u0627\u062a.", "id": "Islam mencakup agama dan negara, tapi hindari fanatik golongan.", "en": "Islam is religion and state, but avoid partisan fanaticism."}}, {"front": {"ar": "\u0627\u0630\u0643\u0631 \u062d\u062f\u064a\u062b\u0627 \u0639\u0646 \u0641\u0636\u0644 \u0637\u0644\u0628 \u0627\u0644\u0639\u0644\u0645!", "id": "Sebutkan hadits fadhilah ilmu!", "en": "Mention a hadith on the virtue of seeking knowledge!"}, "back": {"ar": "\u0642\u0627\u0644 \ufdfa: '\u0645\u0646 \u0633\u0644\u0643 \u0637\u0631\u064a\u0642\u0627 \u064a\u0644\u062a\u0645\u0633 \u0641\u064a\u0647 \u0639\u0644\u0645\u0627 \u0633\u0647\u0644 \u0627\u0644\u0644\u0647 \u0644\u0647 \u0628\u0647 \u0637\u0631\u064a\u0642\u0627 \u0625\u0644\u0649 \u0627\u0644\u062c\u0646\u0629'.", "id": "Siapa menempuh jalan cari ilmu, Allah mudahkan jalan ke surga.", "en": "Whoever takes a path seeking knowledge, Allah makes the path to Paradise easy for him."}}, {"front": {"ar": "\u0645\u0646 \u0647\u0648 \u0645\u0624\u0644\u0641 \u0643\u062a\u0627\u0628 \u0631\u064a\u0627\u0636 \u0627\u0644\u0635\u0627\u0644\u062d\u064a\u0646\u061f", "id": "Siapa penulis Riyadhush Shalihin?", "en": "Who is the author of Riyadh al-Salihin?"}, "back": {"ar": "\u0627\u0644\u0625\u0645\u0627\u0645 \u0627\u0644\u0646\u0648\u0648\u064a \u0631\u062d\u0645\u0647 \u0627\u0644\u0644\u0647.", "id": "Imam An-Nawawi.", "en": "Imam An-Nawawi."}}, {"front": {"ar": "\u0647\u0644 \u062a\u062a\u0627\u0628\u0639 \u0623\u062e\u0628\u0627\u0631 \u0627\u0644\u0639\u0627\u0644\u0645 \u0627\u0644\u0625\u0633\u0644\u0627\u0645\u064a\u061f", "id": "Ikuti berita dunia Islam?", "en": "Do you follow Muslim world news?"}, "back": {"ar": "\u0646\u0639\u0645\u060c \u0644\u0623\u0647\u062a\u0645 \u0628\u0623\u0645\u0648\u0631 \u0627\u0644\u0645\u0633\u0644\u0645\u064a\u0646 \u0643\u0645\u0627 \u0648\u0635\u0627\u0646\u0627 \u0627\u0644\u0646\u0628\u064a \ufdfa.", "id": "Ya, agar peduli urusan muslimin sesuai wasiat Nabi.", "en": "Yes, to care about Muslim affairs as the Prophet \ufdfa advised."}}, {"front": {"ar": "\u0645\u0627 \u0647\u0648 \u062a\u0639\u0631\u064a\u0641 '\u0627\u0644\u0623\u0645\u0627\u0646\u0629' \u0644\u0644\u0637\u0627\u0644\u0628\u061f", "id": "Apa itu amanah bagi pelajar?", "en": "What is 'Trust' (Amanah) for a student?"}, "back": {"ar": "\u0627\u0644\u062c\u062f \u0641\u064a \u0627\u0644\u062f\u0631\u0627\u0633\u0629 \u0648\u0627\u0644\u0635\u062f\u0642 \u0648\u0627\u0644\u0627\u0644\u062a\u0632\u0627\u0645 \u0628\u0627\u0644\u0623\u0646\u0638\u0645\u0629.", "id": "Sungguh-sungguh belajar, jujur, dan taat aturan.", "en": "Seriousness in study, honesty, and compliance with rules."}}, {"front": {"ar": "\u0645\u0627 \u0647\u064a \u0643\u0644\u0645\u062a\u0643 \u0627\u0644\u0623\u062e\u064a\u0631\u0629 \u0644\u0644\u062c\u0646\u0629\u061f", "id": "Kata terakhirmu untuk penguji?", "en": "Your final words to the committee?"}, "back": {"ar": "\u062c\u0632\u0627\u0643\u0645 \u0627\u0644\u0644\u0647 \u062e\u064a\u0631\u0627 \u0648\u0623\u0631\u062c\u0648 \u0623\u0646 \u0623\u0643\u0648\u0646 \u0637\u0627\u0644\u0628\u0627 \u0641\u064a \u0647\u0630\u0647 \u0627\u0644\u062c\u0627\u0645\u0639\u0629.", "id": "Jazaakumullah khairan, saya berharap bisa diterima.", "en": "Jazakumullah khairan, I hope to be a student at this university."}}]};
+        let currentSetName = Object.keys(allData)[0];
+        let currentSet = allData[currentSetName];
         let currentIndex = 0;
-        let currentLang = 'id';
-        const cardEl = document.getElementById('flashcard');
 
-        function updateCard() {
-            cardEl.classList.remove('flipped');
+        const setSelect = document.getElementById('setSelect');
+        const langSelect = document.getElementById('langSelect');
+        const card = document.getElementById('flashcard');
+
+        // Initialize Select Options
+        Object.keys(allData).forEach(name => {
+            let opt = document.createElement('option');
+            opt.value = name;
+            opt.innerText = name;
+            setSelect.appendChild(opt);
+        });
+
+        function renderCard() {
+            card.classList.remove('flipped');
+            const lang = langSelect.value;
+            const item = currentSet[currentIndex];
+
+            // Update layout tags based on the current user selection
+            document.getElementById('tag-front').innerText = (lang === 'id' ? 'Pertanyaan' : 'Question');
+            document.getElementById('tag-back').innerText = (lang === 'id' ? 'Contoh Jawaban' : 'Answer Guide');
+
             setTimeout(() => {
-                const item = flashcardsData[currentIndex];
                 document.getElementById('front-arabic').innerText = item.front.ar;
-                document.getElementById('front-trans').innerText = item.front[currentLang];
-                
+                document.getElementById('front-trans').innerText = item.front[lang];
                 document.getElementById('back-arabic').innerText = item.back.ar;
-                document.getElementById('back-trans').innerText = item.back[currentLang];
-                
-                document.getElementById('progress-text').innerText = `Kartu ${currentIndex + 1} dari ${flashcardsData.length}`;
-            }, 150);
+                document.getElementById('back-trans').innerText = item.back[lang];
+                document.getElementById('progressText').innerText = `Card ${currentIndex + 1} / ${currentSet.length} (${currentSetName})`;
+            }, 100);
         }
 
         function flipCard() {
-            cardEl.classList.toggle('flipped');
+            card.classList.toggle('flipped');
         }
 
-        function nextCard(event) {
-            event.stopPropagation();
-            currentIndex = (currentIndex + 1) % flashcardsData.length;
-            updateCard();
+        function changeSet() {
+            currentSetName = setSelect.value;
+            currentSet = allData[currentSetName];
+            currentIndex = 0;
+            renderCard();
         }
 
-        function prevCard(event) {
-            event.stopPropagation();
-            currentIndex = (currentIndex - 1 + flashcardsData.length) % flashcardsData.length;
-            updateCard();
+        function nextCard(e) {
+            e.stopPropagation();
+            currentIndex = (currentIndex + 1) % currentSet.length;
+            renderCard();
         }
 
-        function randomCard(event) {
-            event.stopPropagation();
-            currentIndex = Math.floor(Math.random() * flashcardsData.length);
-            updateCard();
+        function prevCard(e) {
+            e.stopPropagation();
+            currentIndex = (currentIndex - 1 + currentSet.length) % currentSet.length;
+            renderCard();
         }
 
-        function changeLanguage() {
-            currentLang = document.getElementById('langSelect').value;
-            const frontInd = document.querySelector('.card-front .side-indicator');
-            const backInd = document.querySelector('.card-back .side-indicator');
-            if(currentLang === 'en') {
-                frontInd.innerText = "Question / Sheikh";
-                backInd.innerText = "Your Answer";
-            } else {
-                frontInd.innerText = "Pertanyaan / Syaikh";
-                backInd.innerText = "Jawaban Anda";
-            }
-            updateCard();
+        function shuffleCard(e) {
+            e.stopPropagation();
+            currentIndex = Math.floor(Math.random() * currentSet.length);
+            renderCard();
         }
 
-        updateCard();
+        // Initial Render
+        renderCard();
     </script>
 </body>
 </html>
